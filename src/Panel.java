@@ -4,12 +4,12 @@ import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
-    public Panel(int length, int width) {
+    public Panel(int length, int height) {
         super();
-        setPreferredSize(new Dimension(length, width));
+        setBackground(Color.WHITE);
+        setPreferredSize(new Dimension(length, height));
         addMouseListener(this);
         addMouseMotionListener(this);
-
     }
 
     @Override
