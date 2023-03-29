@@ -1,10 +1,12 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
-    public Panel() {
+    public Panel(int length, int width) {
         super();
+        setPreferredSize(new Dimension(length, width));
         addMouseListener(this);
         addMouseMotionListener(this);
 
