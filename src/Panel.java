@@ -2,14 +2,43 @@ import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
-public class Panel extends JPanel implements MouseListener, MouseMotionListener{
+public class Panel extends JPanel implements MouseListener {
+
+    protected Stroke gridWidth;
+    protected Stroke playerOutlineWidth;
+    protected double radius;
+
+    // light mode colors
+    protected Color colorLightBackground;
+    protected Color colorLightBoard;
+    protected Color colorLightGrid;
+    protected Color colorLightPlayer1;
+    protected Color colorLightPlayer1Outline;
+    protected Color colorLightPlayer2;
+    protected Color colorLightPlayer2Outline;
+    protected Color colorLightCapturedBlock;
+
+    // dark mode colors
+    protected Color colorDarkBackground;
+    protected Color colorDarkBoard;
+    protected Color colorDarkGrid;
+    protected Color colorDarkPlayer1;
+    protected Color colorDarkPlayer1Outline;
+    protected Color colorDarkPlayer2;
+    protected Color colorDarkPlayer2Outline;
+    protected Color colorDarkCapturedBlock;
 
     public Panel(int length, int height) {
         super();
-        setBackground(Color.WHITE);
         setPreferredSize(new Dimension(length, height));
         addMouseListener(this);
-        addMouseMotionListener(this);
+        setFocusable(true);
+
+        // startup values:
+        gridWidth = new BasicStroke(10);
+        playerOutlineWidth = new BasicStroke(5);
+        radius = 20;
+
     }
 
     @Override
@@ -34,16 +63,6 @@ public class Panel extends JPanel implements MouseListener, MouseMotionListener{
 
     @Override
     public void mouseExited(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseDragged(MouseEvent e) {
-
-    }
-
-    @Override
-    public void mouseMoved(MouseEvent e) {
 
     }
 }
