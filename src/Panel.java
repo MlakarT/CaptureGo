@@ -39,6 +39,24 @@ public class Panel extends JPanel implements MouseListener {
         playerOutlineWidth = new BasicStroke(5);
         radius = 20;
 
+        colorLightBackground = Color.LIGHT_GRAY;
+        colorLightBoard = new Color(242,176,109,255);
+        colorLightGrid = Color.BLACK;
+        colorLightPlayer1 = Color.WHITE;
+        colorLightPlayer1Outline = Color.BLACK;
+        colorLightPlayer2 = Color.BLACK;
+        colorLightPlayer2Outline = Color.BLACK;
+        colorLightCapturedBlock = Color.YELLOW;
+
+        colorDarkBackground = Color.DARK_GRAY;
+        colorDarkBoard = new Color(32,33,36,255);
+        colorDarkGrid = new Color(145,149,130,255);
+        colorDarkPlayer1 = new Color(198,70,52,255);
+        colorDarkPlayer1Outline = Color.BLACK;
+        colorDarkPlayer2 = new Color(129,180,120,255);
+        colorDarkPlayer2Outline = Color.BLACK;
+        colorDarkCapturedBlock = new Color(240,180,66,255);
+
     }
     public void gameState(Game game) {
         if (game == null){
@@ -47,6 +65,12 @@ public class Panel extends JPanel implements MouseListener {
             //todo not null state
         };
         repaint();
+    }
+
+    @Override
+    protected void paintComponent(Graphics g) {
+        super.paintComponent(g);
+        //todo paint
     }
     @Override
     public void mouseClicked(MouseEvent e) {
