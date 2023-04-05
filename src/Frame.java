@@ -4,7 +4,9 @@ import java.awt.event.ActionListener;
 
 public class Frame extends JFrame implements ActionListener {
     protected Panel panel;
-
+    protected Game game;
+    private final JMenuItem gamePlay;
+    private final JMenuItem settingsTheme, settingsColorPicker;
     public Frame() {
         super();
         setTitle("Play Capture Go");
@@ -15,8 +17,19 @@ public class Frame extends JFrame implements ActionListener {
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
 
-        JMenu menuGame = addMenu(menubar, "Settings");
+        //top level buttons
+        JMenu menuGame = addMenu(menubar, "Game");
+        JMenu menuSettings = addMenu(menubar, "Settings");
 
+        //game buttons
+        gamePlay = addMenuItem(menuGame, "Play");
+
+        //settings buttons
+        settingsTheme = addMenuItem(menuSettings, "Theme");
+        settingsColorPicker = addMenuItem(menuSettings, "Select colors...");
+
+        // game related info
+        // menubar.add(Game.info(game));
 
 
 

@@ -40,7 +40,14 @@ public class Panel extends JPanel implements MouseListener {
         radius = 20;
 
     }
-
+    public void gameState(Game game) {
+        if (game == null){
+            //todo null state
+        } else {
+            //todo not null state
+        };
+        repaint();
+    }
     @Override
     public void mouseClicked(MouseEvent e) {
 
