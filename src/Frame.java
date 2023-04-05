@@ -4,7 +4,7 @@ import java.awt.event.ActionListener;
 
 public class Frame extends JFrame implements ActionListener {
     protected Panel panel;
-    protected Game game;
+    protected Igra igra;
     private final JMenuItem gamePlay;
     private final JMenuItem settingsTheme, settingsColorPicker;
     public Frame() {

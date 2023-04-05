@@ -58,8 +58,8 @@ public class Panel extends JPanel implements MouseListener {
         colorDarkCapturedBlock = new Color(240,180,66,255);
 
     }
-    public void gameState(Game game) {
-        if (game == null){
+    public void gameState(Igra igra) {
+        if (igra == null){
             //todo null state
         } else {
             //todo not null state
