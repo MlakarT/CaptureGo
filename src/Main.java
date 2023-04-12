@@ -1,3 +1,5 @@
+import gui.Frame;
+import logika.Igra;
 import splosno.Poteza;
 
 public class Main {

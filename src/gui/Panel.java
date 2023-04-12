@@ -1,9 +1,14 @@
+package gui;
+
+import logika.Igra;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener {
-
+    protected Igra game;
+    protected int state;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected double radius;
@@ -35,6 +40,8 @@ public class Panel extends JPanel implements MouseListener {
         setFocusable(true);
 
         // startup values:
+        game = new Igra();
+        state = Igra.NULL_STATE;
         gridWidth = new BasicStroke(10);
         playerOutlineWidth = new BasicStroke(5);
         radius = 20;
@@ -58,14 +65,16 @@ public class Panel extends JPanel implements MouseListener {
         colorDarkCapturedBlock = new Color(240,180,66,255);
 
     }
-    public void gameState(Igra igra) {
-        if (igra == null){
+    public void setGameState(Igra game) {
+        if (game.state == Igra.NULL_STATE){
             //todo null state
         } else {
             //todo not null state
         };
         repaint();
     }
+
+
 
     @Override
     protected void paintComponent(Graphics g) {
