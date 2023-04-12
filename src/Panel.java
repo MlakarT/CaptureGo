@@ -4,6 +4,7 @@ import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener {
 
+    protected Igra igra;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected double radius;
@@ -30,6 +31,7 @@ public class Panel extends JPanel implements MouseListener {
 
     public Panel(int length, int height) {
         super();
+        gameState(new Igra());
         setPreferredSize(new Dimension(length, height));
         addMouseListener(this);
         setFocusable(true);
@@ -58,19 +60,36 @@ public class Panel extends JPanel implements MouseListener {
         colorDarkCapturedBlock = new Color(240,180,66,255);
 
     }
+
+    // pač null se požene sam takrt k pržgeš to sam pomen da igre še ni aktivne in takoj k daš da je igra aktivna
+    //
+
     public void gameState(Igra igra) {
-        if (igra == null){
-            //todo null state
+        if (igra.state != 0){
+            int player = igra.state;
+            int size = igra.size;
         } else {
-            //todo not null state
-        };
+            return;
+        }
         repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        //todo paint
+        if (igra == null) return;
+        g.setColor(colorLightBoard);
+        Graphics2D g2 = (Graphics2D) g;
+        Rectangle board = new Rectangle(10, 10, 100, 100);
+        g2.draw(board);
+        g2.setColor(colorLightBoard);
+        g2.fill(board);
+        g.setColor(colorLightGrid);
+        g2.setStroke(gridWidth);
+        for (int i = 0; i < igra.size; i++) {
+            g.drawLine(10 + (100 * i / igra.size), 10, 10 + (100 * i / igra.size), 110);
+        }
+
     }
     @Override
     public void mouseClicked(MouseEvent e) {
