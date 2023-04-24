@@ -9,7 +9,6 @@ import java.util.List;
 public class Group {
     protected int size; //pod nujno da ves na kaksni plosci si
     public HashMap<Poteza, Integer> group;
-    protected static final Poteza[] directions = {new Poteza(1,0), new Poteza(-1, 0), new Poteza(0,1), new Poteza(0, -1)};
     public List<Poteza> liberties;
 
     public Group(int n) {

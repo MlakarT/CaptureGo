@@ -31,7 +31,7 @@ public class Main {
         game.odigraj(poteza11);
         game.printGame();
 
-        //Frame frame = new Frame();
+        //gui.Frame frame = new gui.Frame();
         //frame.pack();
         //frame.setVisible(true);
     }
