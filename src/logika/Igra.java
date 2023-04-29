@@ -7,8 +7,10 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Igra {
-    protected int size;
-    protected int[][] grid;
+
+    // size and grid changed to public so that panel can access them
+    public int size;
+    public int[][] grid;
     public int state;
     public static final int NULL_STATE = 0;
     public static final int BLACK_STATE = 1;

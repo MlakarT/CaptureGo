@@ -1,12 +1,18 @@
 package gui;
 
+import logika.*;
+import splosno.*;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.*;
 
 public class Panel extends JPanel implements MouseListener {
 
-    protected Igra igra;
+    private static final int CELL_SIZE = 50;
+    private Igra igra;
+    private int xClicked, yClicked;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
@@ -31,15 +37,18 @@ public class Panel extends JPanel implements MouseListener {
     protected Color colorDarkPlayerWhiteOutline;
     protected Color colorDarkCapturedBlock;
 
-    public Panel(int length, int height) {
+    public Panel(int panelWidth, int panelHeight) {
         super();
-        gameState(new Igra());
-        setPreferredSize(new Dimension(length, height));
+        setGameState(new Igra());
+        // make the board centered and fit to screen:
+        setPreferredSize(new Dimension(panelWidth, panelHeight));
+        setMaximumSize(new Dimension(panelWidth, panelHeight));
+        setLayout(new BorderLayout());
         addMouseListener(this);
         setFocusable(true);
 
         // startup values:
-        gridWidth = new BasicStroke(10);
+        gridWidth = new BasicStroke(5);
         playerOutlineWidth = new BasicStroke(5);
         radius = 20;
 
@@ -63,59 +72,75 @@ public class Panel extends JPanel implements MouseListener {
 
     }
 
-    // pač null se požene sam takrt k pržgeš to sam pomen da igre še ni aktivne in takoj k daš da je igra aktivna
-    //
-
-    public void gameState(Igra igra) {
-        if (igra.state != 0){
+    public void setGameState(Igra igra) {
+        if (igra.state != 0) {
             int player = igra.state;
             int size = igra.size;
-        } else {
-            return;
+            if (this.igra != null && this.igra.state == player && this.igra.size == size) {
+                return;
+            }
+            this.igra = igra;
+            repaint();
         }
-        repaint();
     }
 
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
         if (igra == null) return;
+        int size = igra.size;
+        int[][] grid = igra.grid;
+
+        // drawing the board:
+        int boardWidth = size * CELL_SIZE;
+        int boardHeight = size * CELL_SIZE;
+        int boardX = (getWidth() - boardWidth) / 2;
+        int boardY = (getHeight() - boardHeight) / 2;
         g.setColor(colorLightBoard);
-        Graphics2D g2 = (Graphics2D) g;
-        Rectangle board = new Rectangle(10, 10, 100, 100);
-        g2.draw(board);
-        g2.setColor(colorLightBoard);
-        g2.fill(board);
+        g.fillRect(boardX, boardY, boardWidth, boardHeight);
+
+        // drawing the grid:
         g.setColor(colorLightGrid);
-        g2.setStroke(gridWidth);
-        for (int i = 0; i < igra.size; i++) {
-            g.drawLine(10 + (100 * i / igra.size), 10, 10 + (100 * i / igra.size), 110);
+        for (int i = 0; i <= size; i++) {
+            g.drawLine(boardX + i * CELL_SIZE, boardY, boardX + i * CELL_SIZE, boardY + size * CELL_SIZE);
+            g.drawLine(boardX, boardY + i * CELL_SIZE, boardX + size * CELL_SIZE, boardY + i * CELL_SIZE);
         }
-        for (int i = 0; i < igra.size; i++) {
-            for (int j = 0; j < igra.size; j++) {
-                if (igra.grid[i][j] == -1) {
-                    drawPlayer(g, i, j, colorLightPlayerBlack, colorLightPlayerBlackOutline);
-                }
-                else if (igra.grid[i][j] == 1) {
-                    drawPlayer(g, i, j, colorLightPlayerWhite, colorLightPlayerWhiteOutline);
+
+        //drawing the stones:
+        for (int row = 0; row < size; row++) {
+            for (int col = 0; col < size; col++) {
+                int stone = grid[row][col];
+                if (stone == Igra.BLACK_STATE) {
+                    g.setColor(colorLightPlayerBlack);
+                    g.fillOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    g.setColor(colorLightPlayerBlackOutline);
+                    g.drawOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                } else if (stone == Igra.WHITE_STATE) {
+                    g.setColor(colorLightPlayerWhite);
+                    g.fillOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                    g.setColor(colorLightPlayerWhiteOutline);
+                    g.drawOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                 }
             }
         }
     }
 
-    private void drawPlayer(Graphics g, int i, int j, Color colorLightPlayerWhite, Color colorLightPlayerWhiteOutline) {
-        g.setColor(colorLightPlayerWhite);
-        g.fillOval(10 + (100 * j / igra.size), 10 + (100 * i / igra.size), 2 * radius, 2 * radius);
-        g.setColor(colorLightPlayerWhiteOutline);
-        g.drawOval(10 + (100 * j / igra.size), 10 + (100 * i / igra.size), 2 * radius, 2 * radius);
-    }
-
     @Override
     public void mouseClicked(MouseEvent e) {
         if (igra == null) return;
-        int x = e.getX();
-        int y = e.getY();
-
+        int size = igra.size;
+        int boardWidth = size * CELL_SIZE;
+        int boardHeight = size * CELL_SIZE;
+        int boardX = (getWidth() - boardWidth) / 2;
+        int boardY = (getHeight() - boardHeight) / 2;
+        int x = (e.getX() - boardX) / CELL_SIZE;
+        int y = (e.getY() - boardY) / CELL_SIZE;
+        Poteza poteza = new Poteza(x,y);
+        Igra novaigra = igra;
+        boolean success = novaigra.odigraj(poteza);
+        if (success) {
+            igra.odigraj(poteza);
+        }
         repaint();
     }
 
