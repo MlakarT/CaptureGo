@@ -1,4 +1,5 @@
 package gui;
+import logika.Igra;
 
 import logika.Igra;
 import javax.swing.*;

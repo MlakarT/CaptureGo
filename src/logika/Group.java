@@ -28,7 +28,7 @@ public class Group {
             this.group.putIfAbsent(p, h.group.get(p));
         }
     }
-
+    
     public boolean isCaptured() {
         return (this.group.size() != 0 && this.liberties.size() == 0);
     }

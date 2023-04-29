@@ -7,8 +7,6 @@ import java.util.LinkedList;
 import java.util.List;
 
 public class Igra {
-
-    // size and grid changed to public so that panel can access them
     public int size;
     public int[][] grid;
     public int state;
@@ -43,21 +41,27 @@ public class Igra {
     }
     private boolean isAlone(Poteza poteza) {
         boolean alone = true;
+        //System.out.println("Checking neighbours for poteza " + poteza.x() + ", " + poteza.y() + ":");
+        //todo check boundary conditions
         for (Poteza dir : directions) {
             Poteza p = new Poteza(poteza.x() + dir.x(), poteza.y() + dir.y());
+            //System.out.println("Checking poteza " + p);
             if (0 <= p.x() && p.x() < this.size) {
                 if (0 <= p.y() && p.y() < this.size) {
+                    //System.out.println("    " + p + " is within bounds");
                     alone = this.grid[p.y()][p.x()] != this.state;
                 }
-                else {
-                    alone = this.grid[poteza.y()][p.x()] != this.state;
-                }
+                //else {
+                //    System.out.println("    " + p + " is within bounds in x dir");
+                //    alone = this.grid[poteza.y()][p.x()] != this.state;
+                //}
             }
-            else {
-                if (0 <= poteza.y() + dir.y() && poteza.y() + dir.y() < this.size) {
-                    alone = this.grid[p.y()][poteza.x()] != this.state;
-                }
-            }
+            //else {
+            //    if (0 <= poteza.y() + dir.y() && poteza.y() + dir.y() < this.size) {
+            //        System.out.println("    " + p + " is out of bounds in x dir");
+            //        alone = this.grid[p.y()][poteza.x()] != this.state;
+            //    }
+            //}
             if (!alone) break;
         }
         return alone;
@@ -70,6 +74,10 @@ public class Igra {
             }
         }
         return null;
+    }
+
+    private int groupState(Group g) {
+        return g.group.get(g.group.keySet().iterator().next());
     }
 
     private boolean isSuicide(Poteza poteza) {
@@ -98,28 +106,30 @@ public class Igra {
         }
     }
     public boolean odigraj(Poteza poteza) {
+        System.out.println("current state is " + this.state);
         if (this.state == CAPTURED_STATE) return false;
         // this only happens once, does not let any other Poteza play
         // used mostly for testing purposes, as the game closes immediately
         if (this.grid[poteza.y()][poteza.x()] == 0 && !isSuicide(poteza)) {
             this.grid[poteza.y()][poteza.x()] = this.state;
-            // System.out.println(poteza.toString() +" is alone " + this.isAlone(poteza));
+            System.out.println(poteza +" is alone " + this.isAlone(poteza));
             //todo check if poteza is alone
             //todo okej tuki skos ne pride
             if (!this.isAlone(poteza)) {
                 for (Poteza dir : directions) {
                     //todo find the first nonempty group
                     Group g = this.isInGroup(new Poteza(poteza.x() + dir.x(), poteza.y() + dir.y()));
-                    if (g != null) {
-                        // System.out.println("found group " + g.toString());
+                    if (g != null && this.groupState(g) == this.state) {
+                        System.out.println("found group " + g + " with state " + this.groupState(g));
                         g.addTo(poteza, this.state);
+                        System.out.println("Added poteza " + poteza.x() + ", " + poteza.y() + " to group " + g);
                         //todo add the poteza to the group
                         for (Poteza dir2 : directions) {
                             //todo merge other groups with group
                             Group h = this.isInGroup(new Poteza(poteza.x() + dir2.x(), poteza.y() + dir2.y()));
-                            if (h != g && h != null) {
+                            if (h != g && h != null && this.groupState(g) == this.groupState(h)) {
                                 g.mergeGroup(h);
-                                // System.out.println("Merged group " + h.toString() + " to g");
+                                System.out.println("Merged group " + h + " to " + g);
                                 this.groups.remove(h);
                             }
                         }
@@ -128,14 +138,19 @@ public class Igra {
                 }
             } else {
                 Group g = new Group(this.size);
+                System.out.println("placed new group " + g + " at position " + poteza.x() + ", " + poteza.y());
                 g.addTo(poteza, this.state);
                 this.resetLiberties(g);
                 this.groups.add(g);
+                System.out.println("added group " + g + " to game groups");
             }
             //merge with other groups
-            // System.out.println("Reached the end of 'odigraj' block");
+            System.out.println("Reached the end of 'odigraj' block");
             this.resetAllGroups();
             this.switchState();
+            System.out.println("Switched state to " + this.state );
+            System.out.println("----------------------");
+            System.out.println();
             if (this.gameOver()) {
                 this.close();
             }
