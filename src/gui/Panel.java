@@ -9,7 +9,7 @@ import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
 
-    private int cell_size;
+    private int cellSize;
     private Igra igra;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
@@ -18,25 +18,14 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     // the colour of a captured block:
     protected int index;
 
-    // light mode colors
-    protected Color colorLightBackground;
-    protected Color colorLightBoard;
-    protected Color colorLightGrid;
-    protected Color colorLightPlayerBlack;
-    protected Color colorLightPlayerBlackOutline;
-    protected Color colorLightPlayerWhite;
-    protected Color colorLightPlayerWhiteOutline;
-    protected Color colorLightCapturedBlock;
-
-    // dark mode colors
-    protected Color colorDarkBackground;
-    protected Color colorDarkBoard;
-    protected Color colorDarkGrid;
-    protected Color colorDarkPlayerBlack;
-    protected Color colorDarkPlayerBlackOutline;
-    protected Color colorDarkPlayerWhite;
-    protected Color colorDarkPlayerWhiteOutline;
-    protected Color colorDarkCapturedBlock;
+    protected Color colorBackground;
+    protected Color colorBoard;
+    protected Color colorGrid;
+    protected Color colorPlayerBlack;
+    protected Color colorPlayerBlackOutline;
+    protected Color colorPlayerWhite;
+    protected Color colorPlayerWhiteOutline;
+    protected Color colorCapturedBlock;
 
     public Panel(int panelWidth, int panelHeight) {
         super();
@@ -52,27 +41,19 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // initial values:
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        cell_size = Math.min(panelWidth, panelHeight) / (igra.size + 1);
-        radius = 4 * cell_size / 5;
+        cellSize = Math.min(panelWidth, panelHeight) / (igra.size + 1);
+        radius = 4 * cellSize / 5;
         index = 0;
 
-        colorLightBackground = Color.LIGHT_GRAY;
-        colorLightBoard = new Color(242,176,109,255);
-        colorLightGrid = Color.BLACK;
-        colorLightPlayerBlack = Color.BLACK;
-        colorLightPlayerBlackOutline = Color.BLACK;
-        colorLightPlayerWhite = Color.WHITE;
-        colorLightPlayerWhiteOutline = Color.BLACK;
-        colorLightCapturedBlock = Color.RED;
-
-        colorDarkBackground = Color.DARK_GRAY;
-        colorDarkBoard = new Color(32,33,36,255);
-        colorDarkGrid = new Color(145,149,130,255);
-        colorDarkPlayerBlack = new Color(129,180,120,255);
-        colorDarkPlayerBlackOutline = Color.BLACK;
-        colorDarkPlayerWhite = new Color(198,70,52,255);
-        colorDarkPlayerWhiteOutline = Color.BLACK;
-        colorDarkCapturedBlock = new Color(240,180,66,255);
+        // initializing color constants:
+        colorBackground = ColorConstants.LIGHT_BACKGROUND;
+        colorBoard = ColorConstants.LIGHT_BOARD;
+        colorGrid = ColorConstants.LIGHT_GRID;
+        colorPlayerBlack = ColorConstants.LIGHT_PLAYER_BLACK;
+        colorPlayerBlackOutline = ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
+        colorPlayerWhite = ColorConstants.LIGHT_PLAYER_WHITE;
+        colorPlayerWhiteOutline = ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
+        colorCapturedBlock = ColorConstants.LIGHT_CAPTURED_BLOCK;
 
     }
 
@@ -97,19 +78,19 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         Graphics2D g2 = (Graphics2D) g;
 
         // drawing the board:
-        int boardWidth = (size - 1) * cell_size;
-        int boardHeight = (size - 1) * cell_size;
+        int boardWidth = (size - 1) * cellSize;
+        int boardHeight = (size - 1) * cellSize;
         int boardX = (getWidth() - boardWidth) / 2;
         int boardY = (getHeight() - boardHeight) / 2;
-        g.setColor(colorLightBoard);
+        g.setColor(colorBoard);
         g.fillRect(boardX, boardY, boardWidth, boardHeight);
 
         // drawing the grid:
-        g.setColor(colorLightGrid);
+        g.setColor(colorGrid);
         for (int i = 0; i < size; i++) {
             g2.setStroke(gridWidth);
-            g.drawLine(boardX + i * cell_size, boardY, boardX + i * cell_size, boardY + (size - 1) * cell_size);
-            g.drawLine(boardX, boardY + i * cell_size, boardX + (size - 1) * cell_size, boardY + i * cell_size);
+            g.drawLine(boardX + i * cellSize, boardY, boardX + i * cellSize, boardY + (size - 1) * cellSize);
+            g.drawLine(boardX, boardY + i * cellSize, boardX + (size - 1) * cellSize, boardY + i * cellSize);
         }
 
         //drawing the stones:
@@ -118,16 +99,16 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
                 int stone = grid[row][col];
                 g2.setStroke(playerOutlineWidth);
                 if (stone == Igra.BLACK_STATE) {
-                    drawStone(g, boardX, boardY, row, col, colorLightPlayerBlack, colorLightPlayerBlackOutline);
+                    drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorPlayerBlackOutline);
                 }
                 else if (stone == Igra.WHITE_STATE) {
-                    drawStone(g, boardX, boardY, row, col, colorLightPlayerWhite, colorLightPlayerWhiteOutline);
+                    drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorPlayerWhiteOutline);
                 }
                 else if (stone == Igra.CAPTURED_STATE) {
                     if (index % 2 == 0) {
-                        drawStone(g, boardX, boardY, row, col, colorLightPlayerBlack, colorLightCapturedBlock);
+                        drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorCapturedBlock);
                     }
-                    else drawStone(g, boardX, boardY, row, col, colorLightPlayerWhite, colorLightCapturedBlock);
+                    else drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorCapturedBlock);
                 }
             }
         }
@@ -135,9 +116,9 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
 
     private void drawStone(Graphics g, int boardX, int boardY, int row, int col, Color colorStone, Color colorStoneOutline) {
         g.setColor(colorStone);
-        g.fillOval(boardX + col * cell_size - radius / 2, boardY + row * cell_size - radius / 2, radius, radius);
+        g.fillOval(boardX + col * cellSize - radius / 2, boardY + row * cellSize - radius / 2, radius, radius);
         g.setColor(colorStoneOutline);
-        g.drawOval(boardX + col * cell_size - radius / 2, boardY + row * cell_size - radius / 2, radius, radius);
+        g.drawOval(boardX + col * cellSize - radius / 2, boardY + row * cellSize - radius / 2, radius, radius);
     }
 
     @Override
@@ -147,12 +128,12 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         int x = e.getX();
         int y = e.getY();
         int size = igra.size;
-        int boardWidth = (size - 1) * cell_size;
-        int boardHeight = (size - 1) * cell_size;
+        int boardWidth = (size - 1) * cellSize;
+        int boardHeight = (size - 1) * cellSize;
         int boardX = (getWidth() - boardWidth) / 2;
         int boardY = (getHeight() - boardHeight) / 2;
-        int col = (x - boardX + cell_size / 2) / cell_size;
-        int row = (y - boardY + cell_size / 2) / cell_size;
+        int col = (x - boardX + cellSize / 2) / cellSize;
+        int row = (y - boardY + cellSize / 2) / cellSize;
 
         Poteza poteza = new Poteza(col, row);
         boolean success = igra.odigraj(poteza);
@@ -171,8 +152,8 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         int panelWidth = c.getWidth();
         int panelHeight = c.getHeight();
 
-        cell_size = Math.min(panelWidth, panelHeight) / (igra.size + 1);
-        radius = 4 * cell_size / 5;
+        cellSize = Math.min(panelWidth, panelHeight) / (igra.size + 1);
+        radius = 4 * cellSize / 5;
         repaint();
     }
 
