@@ -48,8 +48,8 @@ public class Panel extends JPanel implements MouseListener {
         setFocusable(true);
 
         // startup values:
-        gridWidth = new BasicStroke(5);
-        playerOutlineWidth = new BasicStroke(5);
+        gridWidth = new BasicStroke(10);
+        playerOutlineWidth = new BasicStroke(10);
         radius = 20;
 
         colorLightBackground = Color.LIGHT_GRAY;
@@ -115,11 +115,15 @@ public class Panel extends JPanel implements MouseListener {
                     g.fillOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                     g.setColor(colorLightPlayerBlackOutline);
                     g.drawOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
-                } else if (stone == Igra.WHITE_STATE) {
+                }
+                else if (stone == Igra.WHITE_STATE) {
                     g.setColor(colorLightPlayerWhite);
                     g.fillOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
                     g.setColor(colorLightPlayerWhiteOutline);
                     g.drawOval(boardX + col * CELL_SIZE, boardY + row * CELL_SIZE, CELL_SIZE, CELL_SIZE);
+                }
+                else if (stone == Igra.CAPTURED_STATE) {
+                    //TODO captured state
                 }
             }
         }
@@ -128,6 +132,7 @@ public class Panel extends JPanel implements MouseListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (igra == null) return;
+        if (igra.gameOver()) return;
         int size = igra.size;
         int boardWidth = size * CELL_SIZE;
         int boardHeight = size * CELL_SIZE;
@@ -136,8 +141,7 @@ public class Panel extends JPanel implements MouseListener {
         int x = (e.getX() - boardX) / CELL_SIZE;
         int y = (e.getY() - boardY) / CELL_SIZE;
         Poteza poteza = new Poteza(x,y);
-        Igra novaigra = igra;
-        boolean success = novaigra.odigraj(poteza);
+        boolean success = igra.odigraj(poteza);
         if (success) {
             igra.odigraj(poteza);
         }
