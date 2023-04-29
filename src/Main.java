@@ -47,6 +47,11 @@ public class Main {
             System.out.println(g.liberties);
             System.out.println(g.isCaptured());
         }
+
+        gui.Frame frame = new gui.Frame();
+        frame.pack();
+        frame.setVisible(true);
+
     }
 
 }
