@@ -6,13 +6,11 @@ import splosno.*;
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
-import java.util.*;
 
-public class Panel extends JPanel implements MouseListener {
+public class Panel extends JPanel implements MouseListener, ComponentListener {
 
-    private static final int CELL_SIZE = 50;
+    private int cell_size;
     private Igra igra;
-    private int xClicked, yClicked;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
@@ -48,13 +46,15 @@ public class Panel extends JPanel implements MouseListener {
         setMaximumSize(new Dimension(panelWidth, panelHeight));
         setLayout(new BorderLayout());
         addMouseListener(this);
+        addComponentListener(this);
         setFocusable(true);
 
-        // startup values:
+        // initial values:
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        radius = 40;
-        int index = 0;
+        cell_size = Math.min(panelWidth, panelHeight) / (igra.size + 1);
+        radius = 4 * cell_size / 5;
+        index = 0;
 
         colorLightBackground = Color.LIGHT_GRAY;
         colorLightBoard = new Color(242,176,109,255);
@@ -97,10 +97,10 @@ public class Panel extends JPanel implements MouseListener {
         Graphics2D g2 = (Graphics2D) g;
 
         // drawing the board:
-        int boardWidth = (size - 1) * CELL_SIZE;
-        int boardHeight = (size - 1) * CELL_SIZE;
-        int boardX = (getWidth() - boardWidth) / 2 - CELL_SIZE / 2;
-        int boardY = (getHeight() - boardHeight) / 2 - CELL_SIZE / 2;
+        int boardWidth = (size - 1) * cell_size;
+        int boardHeight = (size - 1) * cell_size;
+        int boardX = (getWidth() - boardWidth) / 2;
+        int boardY = (getHeight() - boardHeight) / 2;
         g.setColor(colorLightBoard);
         g.fillRect(boardX, boardY, boardWidth, boardHeight);
 
@@ -108,8 +108,8 @@ public class Panel extends JPanel implements MouseListener {
         g.setColor(colorLightGrid);
         for (int i = 0; i < size; i++) {
             g2.setStroke(gridWidth);
-            g.drawLine(boardX + i * CELL_SIZE, boardY, boardX + i * CELL_SIZE, boardY + (size - 1) * CELL_SIZE);
-            g.drawLine(boardX, boardY + i * CELL_SIZE, boardX + (size - 1) * CELL_SIZE, boardY + i * CELL_SIZE);
+            g.drawLine(boardX + i * cell_size, boardY, boardX + i * cell_size, boardY + (size - 1) * cell_size);
+            g.drawLine(boardX, boardY + i * cell_size, boardX + (size - 1) * cell_size, boardY + i * cell_size);
         }
 
         //drawing the stones:
@@ -135,9 +135,9 @@ public class Panel extends JPanel implements MouseListener {
 
     private void drawStone(Graphics g, int boardX, int boardY, int row, int col, Color colorStone, Color colorStoneOutline) {
         g.setColor(colorStone);
-        g.fillOval(boardX + col * CELL_SIZE - radius / 2, boardY + row * CELL_SIZE - radius / 2, radius, radius);
+        g.fillOval(boardX + col * cell_size - radius / 2, boardY + row * cell_size - radius / 2, radius, radius);
         g.setColor(colorStoneOutline);
-        g.drawOval(boardX + col * CELL_SIZE - radius / 2, boardY + row * CELL_SIZE - radius / 2, radius, radius);
+        g.drawOval(boardX + col * cell_size - radius / 2, boardY + row * cell_size - radius / 2, radius, radius);
     }
 
     @Override
@@ -147,12 +147,12 @@ public class Panel extends JPanel implements MouseListener {
         int x = e.getX();
         int y = e.getY();
         int size = igra.size;
-        int boardWidth = (size - 1) * CELL_SIZE;
-        int boardHeight = (size - 1) * CELL_SIZE;
-        int boardX = (getWidth() - boardWidth) / 2 - CELL_SIZE / 2;
-        int boardY = (getHeight() - boardHeight) / 2 - CELL_SIZE / 2;
-        int col = (x - boardX + CELL_SIZE / 2) / CELL_SIZE;
-        int row = (y - boardY + CELL_SIZE / 2) / CELL_SIZE;
+        int boardWidth = (size - 1) * cell_size;
+        int boardHeight = (size - 1) * cell_size;
+        int boardX = (getWidth() - boardWidth) / 2;
+        int boardY = (getHeight() - boardHeight) / 2;
+        int col = (x - boardX + cell_size / 2) / cell_size;
+        int row = (y - boardY + cell_size / 2) / cell_size;
 
         Poteza poteza = new Poteza(col, row);
         boolean success = igra.odigraj(poteza);
@@ -161,6 +161,18 @@ public class Panel extends JPanel implements MouseListener {
             index++;
         }
 
+        repaint();
+    }
+
+    // making the board resizeable based on the panel size:
+    @Override
+    public void componentResized(ComponentEvent e) {
+        Component c = e.getComponent();
+        int panelWidth = c.getWidth();
+        int panelHeight = c.getHeight();
+
+        cell_size = Math.min(panelWidth, panelHeight) / (igra.size + 1);
+        radius = 4 * cell_size / 5;
         repaint();
     }
 
@@ -181,6 +193,21 @@ public class Panel extends JPanel implements MouseListener {
 
     @Override
     public void mouseExited(MouseEvent e) {
+
+    }
+
+    @Override
+    public void componentMoved(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentShown(ComponentEvent e) {
+
+    }
+
+    @Override
+    public void componentHidden(ComponentEvent e) {
 
     }
 }
