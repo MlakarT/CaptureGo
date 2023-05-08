@@ -104,7 +104,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
                 else if (stone == Igra.WHITE_STATE) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorPlayerWhiteOutline);
                 }
-                else if (stone == Igra.CAPTURED_STATE) {
+                else if (stone == Igra.CAPTURED_BLACK || stone == Igra.CAPTURED_WHITE) {
                     if (index % 2 == 0) {
                         drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorCapturedBlock);
                     }
@@ -124,7 +124,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     @Override
     public void mouseClicked(MouseEvent e) {
         if (igra == null) return;
-        if (igra.gameOver()) return;
+        if (igra.gameOver() != null) return;
         int x = e.getX();
         int y = e.getY();
         int size = igra.size;
