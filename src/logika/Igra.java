@@ -105,13 +105,13 @@ public class Igra {
         }
     }
     public boolean odigraj(Poteza poteza) {
-        System.out.println("current state is " + this.state);
-    if (this.state == CAPTURED_BLACK || this.state == CAPTURED_WHITE) return false;
+        //System.out.println("current state is " + this.state);
+        if (this.state == CAPTURED_BLACK || this.state == CAPTURED_WHITE) {return false;}
         // this only happens once, does not let any other Poteza play
         // used mostly for testing purposes, as the game closes immediately
         if (this.grid[poteza.y()][poteza.x()] == 0 && !isSuicide(poteza)) {
             this.grid[poteza.y()][poteza.x()] = this.state;
-            System.out.println(poteza +" is alone " + this.isAlone(poteza));
+            //System.out.println(poteza +" is alone " + this.isAlone(poteza));
             //todo check if poteza is alone
             //todo okej tuki skos ne pride
             if (!this.isAlone(poteza)) {
@@ -119,16 +119,16 @@ public class Igra {
                     //todo find the first nonempty group
                     Group g = this.isInGroup(new Poteza(poteza.x() + dir.x(), poteza.y() + dir.y()));
                     if (g != null && this.groupState(g) == this.state) {
-                        System.out.println("found group " + g + " with state " + this.groupState(g));
+                        //System.out.println("found group " + g + " with state " + this.groupState(g));
                         g.addTo(poteza, this.state);
-                        System.out.println("Added poteza " + poteza.x() + ", " + poteza.y() + " to group " + g);
+                        //System.out.println("Added poteza " + poteza.x() + ", " + poteza.y() + " to group " + g);
                         //todo add the poteza to the group
                         for (Poteza dir2 : directions) {
                             //todo merge other groups with group
                             Group h = this.isInGroup(new Poteza(poteza.x() + dir2.x(), poteza.y() + dir2.y()));
                             if (h != g && h != null && this.groupState(g) == this.groupState(h)) {
                                 g.mergeGroup(h);
-                                System.out.println("Merged group " + h + " to " + g);
+                                //System.out.println("Merged group " + h + " to " + g);
                                 this.groups.remove(h);
                             }
                         }
@@ -137,19 +137,19 @@ public class Igra {
                 }
             } else {
                 Group g = new Group(this.size);
-                System.out.println("placed new group " + g + " at position " + poteza.x() + ", " + poteza.y());
+                //System.out.println("placed new group " + g + " at position " + poteza.x() + ", " + poteza.y());
                 g.addTo(poteza, this.state);
                 this.resetLiberties(g);
                 this.groups.add(g);
-                System.out.println("added group " + g + " to game groups");
+                //System.out.println("added group " + g + " to game groups");
             }
             //merge with other groups
-            System.out.println("Reached the end of 'odigraj' block");
+            //System.out.println("Reached the end of 'odigraj' block");
             this.resetAllGroups();
             this.switchState();
-            System.out.println("Switched state to " + this.state );
-            System.out.println("----------------------");
-            System.out.println();
+            //System.out.println("Switched state to " + this.state );
+            //System.out.println("----------------------");
+            //System.out.println();
             if (this.gameOver() != null) {
                 this.close();
             }
@@ -198,5 +198,17 @@ public class Igra {
             System.out.println();
         }
         System.out.println();
+    }
+
+    public static Igra copy(Igra igra) {
+    Igra kopija = new Igra();
+    kopija.state = igra.state;
+    for (int i = 0; i < igra.size; ++i) {
+        for (int j = 0; j < igra.size; ++j) {
+            kopija.grid[j][i] = igra.grid[j][i];
+        }
+    }
+    kopija.resetAllGroups();
+    return kopija;
     }
 }
