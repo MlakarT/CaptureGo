@@ -18,10 +18,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
-    // a number that updates whenever a player makes a move. this helps determine
-    // the colour of a captured block:
-    protected int index;
-
     protected Color colorBackground;
     protected Color colorBoard;
     protected Color colorGrid;
@@ -46,7 +42,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         shouldPaint = false;
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        index = 0;
 
         // initializing color constants:
         colorBackground = ColorConstants.LIGHT_BACKGROUND;
