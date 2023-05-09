@@ -1,9 +1,13 @@
 package gui;
 
 import logika.Igra;
+import vodja.PlayerType;
+import vodja.Vodja;
+
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+import java.util.HashMap;
 
 public class Frame extends JFrame implements ActionListener {
     protected Panel panel;
@@ -83,16 +87,32 @@ public class Frame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object object = e.getSource();
         if (object == gamePlayerVsPlayer) {
-            //todo pvc
+            //todo pvp
+            Vodja.vrstaIgralca = new HashMap<>();
+            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
+            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
+            Vodja.playNewGame();
         }
         else if (object == gamePlayerVsComputer) {
             //todo pvc
+            Vodja.vrstaIgralca = new HashMap<>();
+            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
+            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
+            Vodja.playNewGame();
         }
         else if (object == gameComputerVsPlayer) {
             //todo cvp
+            Vodja.vrstaIgralca = new HashMap<>();
+            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
+            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
+            Vodja.playNewGame();
         }
         else if (object == gameComputerVsComputer) {
             //todo cvc
+            Vodja.vrstaIgralca = new HashMap<>();
+            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
+            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
+            Vodja.playNewGame();
         }
         else if (object == settingsLightTheme) {
             panel.colorBackground = ColorConstants.LIGHT_BACKGROUND;

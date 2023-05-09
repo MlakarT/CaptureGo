@@ -3,6 +3,7 @@ package logika;
 import splosno.KdoIgra;
 import splosno.Poteza;
 
+import java.util.HashMap;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -18,8 +19,7 @@ public class Igra {
     public static final int CAPTURED_WHITE = 4;
 
     protected static final Poteza[] directions = {new Poteza(1,0), new Poteza(-1, 0), new Poteza(0,1), new Poteza(0, -1)};
-    private KdoIgra[] players;
-    private KdoIgra currentPlayer;
+    private HashMap<KdoIgra, Integer> players;
     public List<Group> groups;
 
     public Igra() {
@@ -66,7 +66,7 @@ public class Igra {
         return alone;
     }
 
-    private Group isInGroup(Poteza poteza) {
+    public Group isInGroup(Poteza poteza) {
         for (Group g : this.groups) {
             if (g.contains(poteza)) {
                 return g;
@@ -200,15 +200,23 @@ public class Igra {
         System.out.println();
     }
 
-    public static Igra copy(Igra igra) {
-    Igra kopija = new Igra();
-    kopija.state = igra.state;
-    for (int i = 0; i < igra.size; ++i) {
-        for (int j = 0; j < igra.size; ++j) {
-            kopija.grid[j][i] = igra.grid[j][i];
+    public KdoIgra naPotezi() {
+        if (players.size() != 0) {
+            for (KdoIgra igralec : players.keySet()) {
+                if (players.get(igralec) == this.state) return igralec;
+            }
         }
+        return null;
     }
-    kopija.resetAllGroups();
-    return kopija;
+    public static Igra copy(Igra igra) {
+        Igra kopija = new Igra();
+        kopija.state = igra.state;
+        for (int i = 0; i < igra.size; ++i) {
+            for (int j = 0; j < igra.size; ++j) {
+                kopija.grid[j][i] = igra.grid[j][i];
+            }
+        }
+        kopija.resetAllGroups();
+        return kopija;
     }
 }
