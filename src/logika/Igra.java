@@ -168,7 +168,7 @@ public class Igra {
         for (Group g : groups) {
             if (g.isCaptured()) {
                 // check if this actually happened
-                System.out.println("Group " + g + " is captured");
+                //System.out.println("Group " + g + " is captured");
                 for (Poteza p : g.group.keySet()) {
                     int locState = (this.grid[p.y()][p.x()] == BLACK_STATE ? CAPTURED_BLACK : CAPTURED_WHITE);
                     g.group.replace(p, locState);
