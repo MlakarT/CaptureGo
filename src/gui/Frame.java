@@ -92,6 +92,7 @@ public class Frame extends JFrame implements ActionListener {
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
+            panel.igra = Vodja.game;
             repaint();
         }
         else if (object == gamePlayerVsComputer) {
@@ -100,6 +101,7 @@ public class Frame extends JFrame implements ActionListener {
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
+            panel.igra = Vodja.game;
             repaint();
         }
         else if (object == gameComputerVsPlayer) {
@@ -108,6 +110,7 @@ public class Frame extends JFrame implements ActionListener {
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
+            panel.igra = Vodja.game;
             repaint();
         }
         else if (object == gameComputerVsComputer) {
@@ -116,6 +119,7 @@ public class Frame extends JFrame implements ActionListener {
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
+            panel.igra = Vodja.game;
             repaint();
         }
         else if (object == settingsLightTheme) {
