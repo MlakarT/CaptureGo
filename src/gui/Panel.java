@@ -114,11 +114,11 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
                 else if (stone == Igra.WHITE_STATE) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorPlayerWhiteOutline);
                 }
-                else if (stone == Igra.CAPTURED_BLACK || stone == Igra.CAPTURED_WHITE) {
-                    if (index % 2 == 0) {
-                        drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorCapturedBlock);
-                    }
-                    else drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorCapturedBlock);
+                else if (stone == Igra.CAPTURED_BLACK) {
+                    drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorCapturedBlock);
+                }
+                else if (stone == Igra.CAPTURED_WHITE) {
+                    drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorCapturedBlock);
                 }
             }
         }
@@ -149,11 +149,9 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
             Poteza poteza = new Poteza(col, row);
             boolean success = igra.odigraj(poteza);
             if (success) {
-                igra.odigraj(poteza);
-                index++;
+                repaint();
             }
 
-            repaint();
         }
 
     }
