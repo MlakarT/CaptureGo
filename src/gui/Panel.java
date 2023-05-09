@@ -2,6 +2,7 @@ package gui;
 
 import logika.Igra;
 import splosno.Poteza;
+import vodja.Vodja;
 
 import javax.swing.*;
 import java.awt.*;
@@ -9,6 +10,7 @@ import java.awt.event.*;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
 
+    protected boolean shouldPaint;
     private int cellSize;
     protected Igra igra;
     protected Stroke gridWidth;
@@ -39,10 +41,9 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         setLayout(new BorderLayout());
 
         // initial values:
+        shouldPaint = false;
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        cellSize = Math.min(panelWidth, panelHeight) / (igra.size + 1);
-        radius = 4 * cellSize / 5;
         index = 0;
 
         // initializing color constants:
@@ -58,13 +59,15 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     }
 
     public void setGameState(Igra igra) {
-        if (igra.state != 0) {
+        if (igra != null) {
             int player = igra.state;
             int size = igra.size;
             if (this.igra != null && this.igra.state == player && this.igra.size == size) {
                 return;
             }
             this.igra = igra;
+            cellSize = Math.min(getWidth(), getHeight()) / (igra.size + 1);
+            radius = 4 * cellSize / 5;
             repaint();
         }
     }
@@ -72,10 +75,15 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
+        if (!shouldPaint) return;
         if (igra == null) return;
         int size = igra.size;
         int[][] grid = igra.grid;
         Graphics2D g2 = (Graphics2D) g;
+
+        // drawing the background:
+        g.setColor(colorBackground);
+        g.fillRect(0, 0, getWidth(), getHeight());
 
         // drawing the board:
         int boardWidth = (size - 1) * cellSize;
@@ -149,10 +157,10 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     @Override
     public void componentResized(ComponentEvent e) {
         Component c = e.getComponent();
-        int panelWidth = c.getWidth();
-        int panelHeight = c.getHeight();
-        cellSize = Math.min(panelWidth, panelHeight) / (igra.size + 1);
-        radius = 4 * cellSize / 5;
+        if (igra != null) {
+            cellSize = Math.min(c.getWidth(), c.getHeight()) / (igra.size + 1);
+            radius = 4 * cellSize / 5;
+        }
         repaint();
     }
 

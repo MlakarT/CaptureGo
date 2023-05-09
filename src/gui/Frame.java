@@ -87,32 +87,36 @@ public class Frame extends JFrame implements ActionListener {
     public void actionPerformed(ActionEvent e) {
         Object object = e.getSource();
         if (object == gamePlayerVsPlayer) {
-            //todo pvp
+            panel.shouldPaint = true;
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
+            repaint();
         }
         else if (object == gamePlayerVsComputer) {
-            //todo pvc
+            panel.shouldPaint = true;
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
+            repaint();
         }
         else if (object == gameComputerVsPlayer) {
-            //todo cvp
+            panel.shouldPaint = true;
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
+            repaint();
         }
         else if (object == gameComputerVsComputer) {
-            //todo cvc
+            panel.shouldPaint = true;
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
+            repaint();
         }
         else if (object == settingsLightTheme) {
             panel.colorBackground = ColorConstants.LIGHT_BACKGROUND;
