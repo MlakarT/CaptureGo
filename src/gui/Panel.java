@@ -2,11 +2,13 @@ package gui;
 
 import logika.Igra;
 import splosno.Poteza;
-import vodja.Vodja;
 
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.*;
+
+import static vodja.PlayerType.C;
+import static vodja.Vodja.vrstaIgralca;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
 
@@ -133,24 +135,27 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     public void mouseClicked(MouseEvent e) {
         if (igra == null) return;
         if (igra.gameOver() != null) return;
-        int x = e.getX();
-        int y = e.getY();
-        int size = igra.size;
-        int boardWidth = (size - 1) * cellSize;
-        int boardHeight = (size - 1) * cellSize;
-        int boardX = (getWidth() - boardWidth) / 2;
-        int boardY = (getHeight() - boardHeight) / 2;
-        int col = (x - boardX + cellSize / 2) / cellSize;
-        int row = (y - boardY + cellSize / 2) / cellSize;
+        if (vrstaIgralca.get(igra.state) == C) {
+            int x = e.getX();
+            int y = e.getY();
+            int size = igra.size;
+            int boardWidth = (size - 1) * cellSize;
+            int boardHeight = (size - 1) * cellSize;
+            int boardX = (getWidth() - boardWidth) / 2;
+            int boardY = (getHeight() - boardHeight) / 2;
+            int col = (x - boardX + cellSize / 2) / cellSize;
+            int row = (y - boardY + cellSize / 2) / cellSize;
 
-        Poteza poteza = new Poteza(col, row);
-        boolean success = igra.odigraj(poteza);
-        if (success) {
-            igra.odigraj(poteza);
-            index++;
+            Poteza poteza = new Poteza(col, row);
+            boolean success = igra.odigraj(poteza);
+            if (success) {
+                igra.odigraj(poteza);
+                index++;
+            }
+
+            repaint();
         }
 
-        repaint();
     }
 
     // making the board resizeable based on the panel size:
