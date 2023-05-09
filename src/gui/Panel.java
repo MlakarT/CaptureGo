@@ -142,8 +142,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
             int col = (x - boardX + cellSize / 2) / cellSize;
             int row = (y - boardY + cellSize / 2) / cellSize;
             Poteza poteza = new Poteza(col, row);
-            if ( Vodja.playHumanTurn(poteza)) repaint();
-
+            if (Vodja.playHumanTurn(poteza)) repaint();
         }
 
     }
