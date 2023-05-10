@@ -11,8 +11,6 @@ import static vodja.PlayerType.C;
 import static vodja.Vodja.vrstaIgralca;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
-
-    protected boolean shouldPaint;
     private int cellSize;
     protected Igra igra;
     protected Stroke gridWidth;
@@ -39,7 +37,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         setLayout(new BorderLayout());
 
         // initial values:
-        shouldPaint = false;
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
 
@@ -72,7 +69,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);
-        if (!shouldPaint) return;
         if (igra == null) return;
         int size = igra.size;
         int[][] grid = igra.grid;

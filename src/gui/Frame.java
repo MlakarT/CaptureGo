@@ -12,6 +12,8 @@ import java.util.HashMap;
 public class Frame extends JFrame implements ActionListener {
     protected Panel panel;
     protected Igra game;
+    protected JPanel buttonPanel;
+    protected JButton pvpButton, pvcButton, cvpButton, cvcButton;
     private final JMenuItem gamePlayerVsPlayer, gamePlayerVsComputer, gameComputerVsPlayer, gameComputerVsComputer;
     private final JMenuItem settingsLightTheme, settingsDarkTheme;
     private final JMenuItem menuBackgroundColor, menuBoardColor, menuGridColor, menuPlayerBlackColor,
@@ -51,8 +53,45 @@ public class Frame extends JFrame implements ActionListener {
         settingsColorPicker.addSeparator();
         menuPlayerBlackColor = addMenuItem(settingsColorPicker, "First player color");
         menuPlayerBlackOutlineColor = addMenuItem(settingsColorPicker, "First player outline color");
-        menuPlayerWhiteColor = addMenuItem(settingsColorPicker, "Second player outline color");
+        menuPlayerWhiteColor = addMenuItem(settingsColorPicker, "Second player color");
         menuPlayerWhiteOutlineColor = addMenuItem(settingsColorPicker, "Second player outline color");
+
+        buttonPanel = new JPanel();
+        buttonPanel.setPreferredSize(new Dimension(800, 800));
+        buttonPanel.setLayout(new GridBagLayout());
+
+        GridBagConstraints gbc = new GridBagConstraints();
+        gbc.insets = new Insets(7, 7, 7, 7);
+
+        pvpButton = new JButton("Player vs player");
+        pvpButton.setPreferredSize(new Dimension(200,100));
+        pvpButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 0;
+        buttonPanel.add(pvpButton, gbc);
+
+        pvcButton = new JButton("Player vs computer");
+        pvcButton.setPreferredSize(new Dimension(200,100));
+        pvcButton.addActionListener(this);
+        gbc.gridx = 1;
+        gbc.gridy = 0;
+        buttonPanel.add(pvcButton, gbc);
+
+        cvpButton = new JButton("Computer vs player");
+        cvpButton.setPreferredSize(new Dimension(200,100));
+        cvpButton.addActionListener(this);
+        gbc.gridx = 0;
+        gbc.gridy = 1;
+        buttonPanel.add(cvpButton, gbc);
+
+        cvcButton = new JButton("Computer vs computer");
+        cvcButton.setPreferredSize(new Dimension(200,100));
+        cvcButton.addActionListener(this);
+        gbc.gridx = 1;
+        gbc.gridy = 1;
+        buttonPanel.add(cvcButton, gbc);
+
+        add(buttonPanel, BorderLayout.CENTER);
 
         //todo game related info
         // menubar.add(Game.info(game));
@@ -86,41 +125,45 @@ public class Frame extends JFrame implements ActionListener {
     @Override
     public void actionPerformed(ActionEvent e) {
         Object object = e.getSource();
-        if (object == gamePlayerVsPlayer) {
-            panel.shouldPaint = true;
+        if (object == gamePlayerVsPlayer || object == pvpButton) {
+            remove(buttonPanel);
+            add(panel);
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
             panel.igra = Vodja.game;
-            repaint();
+            SwingUtilities.updateComponentTreeUI(panel);
         }
-        else if (object == gamePlayerVsComputer) {
-            panel.shouldPaint = true;
+        else if (object == gamePlayerVsComputer || object == pvcButton) {
+            remove(buttonPanel);
+            add(panel);
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
             panel.igra = Vodja.game;
-            repaint();
+            SwingUtilities.updateComponentTreeUI(panel);
         }
-        else if (object == gameComputerVsPlayer) {
-            panel.shouldPaint = true;
+        else if (object == gameComputerVsPlayer || object == cvpButton) {
+            remove(buttonPanel);
+            add(panel);
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
             panel.igra = Vodja.game;
-            repaint();
+            SwingUtilities.updateComponentTreeUI(panel);
         }
-        else if (object == gameComputerVsComputer) {
-            panel.shouldPaint = true;
+        else if (object == gameComputerVsComputer || object == cvcButton) {
+            remove(buttonPanel);
+            add(panel);
             Vodja.vrstaIgralca = new HashMap<>();
             Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
             Vodja.playNewGame();
             panel.igra = Vodja.game;
-            repaint();
+            SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == settingsLightTheme) {
             panel.colorBackground = ColorConstants.LIGHT_BACKGROUND;
@@ -131,7 +174,6 @@ public class Frame extends JFrame implements ActionListener {
             panel.colorPlayerWhite = ColorConstants.LIGHT_PLAYER_WHITE;
             panel.colorPlayerWhiteOutline = ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
             panel.colorCapturedBlock = ColorConstants.LIGHT_CAPTURED_BLOCK;
-            repaint();
         }
         else if (object == settingsDarkTheme) {
             panel.colorBackground = ColorConstants.DARK_BACKGROUND;
@@ -142,63 +184,55 @@ public class Frame extends JFrame implements ActionListener {
             panel.colorPlayerWhite = ColorConstants.DARK_PLAYER_WHITE;
             panel.colorPlayerWhiteOutline = ColorConstants.DARK_PLAYER_WHITE_OUTLINE;
             panel.colorCapturedBlock = ColorConstants.DARK_CAPTURED_BLOCK;
-            repaint();
         }
         else if (object == menuBackgroundColor) {
             Color color = JColorChooser.showDialog(this, "Choose background color", panel.colorBackground);
             if (color != null) {
                 panel.colorBackground = color;
-                repaint();
             }
         }
         else if (object == menuBoardColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the board", panel.colorBoard);
             if (color != null) {
                 panel.colorBoard = color;
-                repaint();
             }
         }
         else if (object == menuGridColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the grid", panel.colorGrid);
             if (color != null) {
                 panel.colorGrid = color;
-                repaint();
             }
         }
         else if (object == menuCapturedBlockColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the captured block", panel.colorCapturedBlock);
             if (color != null) {
                 panel.colorCapturedBlock = color;
-                repaint();
             }
         }
         else if (object == menuPlayerBlackColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the first player", panel.colorPlayerBlack);
             if (color != null) {
                 panel.colorPlayerBlack = color;
-                repaint();
             }
         }
         else if (object == menuPlayerBlackOutlineColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the first player's outline", panel.colorPlayerBlackOutline);
             if (color != null) {
                 panel.colorPlayerBlackOutline = color;
-                repaint();
             }
         }
         else if (object == menuPlayerWhiteColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the second player", panel.colorPlayerWhite);
             if (color != null) {
                 panel.colorPlayerWhite = color;
-                repaint();
             }
         }
         else if (object == menuPlayerWhiteOutlineColor) {
             Color color = JColorChooser.showDialog(this, "Choose color of the second player's outline", panel.colorPlayerWhiteOutline);
             if (color != null) {
                 panel.colorPlayerWhiteOutline = color;
-                repaint();
             }
         }
+        repaint();
     }
 }

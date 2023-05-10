@@ -1,8 +1,3 @@
-import gui.Frame;
-// import inteligenca.Inteligenca;
-import logika.Group;
-import logika.Igra;
-import splosno.Poteza;
 import vodja.Vodja;
 
 public class Main {
