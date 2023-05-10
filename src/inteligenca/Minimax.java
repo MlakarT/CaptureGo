@@ -21,10 +21,17 @@ public class Minimax extends Inteligenca {
         return najboljsaPoteza.poteza;
     }
 
+    @Override
+    public void igrajPotezo(Igra igra, Poteza poteza) {
+        igra.odigraj(poteza);
+    }
+
     public OcenjenaPoteza minimax(Igra igra, int globina, int jaz) {
+        System.out.println("Shut up im thinking..");
         OcenjenaPoteza najboljsaPoteza = null;
         List<Poteza> moznePoteze = igra.poteze();
         for (Poteza p: moznePoteze) {
+            System.out.println(".. thinking of " + p);
             Igra kopijaIgre = Igra.copy(igra);
             kopijaIgre.odigraj (p);
             int ocena;

@@ -2,6 +2,7 @@ package gui;
 
 import logika.Igra;
 import splosno.Poteza;
+import vodja.Vodja;
 
 import javax.swing.*;
 import java.awt.*;
@@ -136,13 +137,8 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
             int boardY = (getHeight() - boardHeight) / 2;
             int col = (x - boardX + cellSize / 2) / cellSize;
             int row = (y - boardY + cellSize / 2) / cellSize;
-
             Poteza poteza = new Poteza(col, row);
-            boolean success = igra.odigraj(poteza);
-            if (success) {
-                repaint();
-            }
-
+            if (Vodja.playHumanTurn(poteza)) repaint();
         }
 
     }

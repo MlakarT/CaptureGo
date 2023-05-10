@@ -4,10 +4,12 @@ package vodja;
 import java.util.Map;
 
 import javax.swing.SwingWorker;
+import java.util.Random;
 import java.util.concurrent.TimeUnit;
 
 import gui.Frame;
 import inteligenca.Inteligenca;
+import inteligenca.RandomMove;
 import logika.Igra;
 import logika.Igra.*;
 import logika.Igralec;
@@ -26,7 +28,9 @@ public class Vodja {
     public static Igra game = null;
     public static boolean clovekNaVrsti = false;
 
-    public static Inteligenca inteligenca = new Minimax(9);
+    public static Inteligenca inteligenca = new RandomMove();
+    //public static Inteligenca inteligenca = new Minimax(1);
+    //public static Inteligenca inteligenca = new AlphaBeta();
 
     public static void playNewGame() {
         game = new Igra();
@@ -50,24 +54,31 @@ public class Vodja {
     public static void playCpTurn () {
         Igra startGame = game;
         SwingWorker<Poteza, Void> worker = new SwingWorker<>() {
-
-            /**
-             * Computes a result, or throws an exception if unable to do so.
-             *
-             * <p>
-             * Note that this method is executed only once.
-             *
-             * <p>
-             * Note: this method is executed in a background thread.
-             *
-             * @return the computed result
-             * @throws Exception if unable to compute a result
-             */
             @Override
-            protected Poteza doInBackground() throws Exception {
+            protected Poteza doInBackground() {
+                try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
                 return inteligenca.izberiPotezo(game);
+            }
+            @Override
+            protected void done () {
+                Poteza poteza = null;
+                try {poteza = get();} catch (Exception e) {};
+                if (game == startGame && poteza != null) {
+                    inteligenca.igrajPotezo(game,poteza);
+                    frame.repaint();
+                    play();
+                }
             }
         };
         worker.execute();
+    }
+
+    public static boolean playHumanTurn (Poteza poteza) {
+        if (game.odigraj(poteza)) {
+            clovekNaVrsti = false;
+            play();
+            return true;
+        }
+        return false;
     }
 }
