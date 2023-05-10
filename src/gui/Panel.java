@@ -2,6 +2,7 @@ package gui;
 
 import logika.Igra;
 import splosno.Poteza;
+import vodja.PlayerType;
 import vodja.Vodja;
 
 import javax.swing.*;
@@ -114,6 +115,50 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
                 }
             }
         }
+
+        // drawing the player's turn:
+        g.setColor(Color.BLACK);
+        g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
+        String player1;
+        String player2;
+        String turnText;
+        if (vrstaIgralca.get(Igra.BLACK_STATE) == PlayerType.C) {
+            if (vrstaIgralca.get(Igra.WHITE_STATE) == PlayerType.C) {
+                player1 = "first player";
+                player2 = "second player";
+            }
+            else {
+                player1 = "player";
+                player2 = "computer";
+            }
+        }
+        else {
+            if (vrstaIgralca.get(Igra.WHITE_STATE) == PlayerType.C) {
+                player1 = "computer";
+                player2 = "player";
+            }
+            else {
+                player1 = "first computer";
+                player2 = "second computer";
+            }
+        }
+        if (igra.state == Igra.CAPTURED_BLACK) {
+            turnText = player1 + " has won.";
+        }
+        else if (igra.state == Igra.CAPTURED_WHITE) {
+            turnText = player2 + " has won.";
+        }
+        else if (igra.state == Igra.BLACK_STATE) {
+            turnText = "It's " + player1 + "'s turn.";
+        }
+        else {
+            turnText = "It's " + player2 + "'s turn.";
+        }
+        int textWidth = g.getFontMetrics().stringWidth(turnText);
+        int textX = (getWidth() - textWidth) / 2;
+        int textY = 2 * boardY / 3;
+        g.drawString(turnText, textX, textY);
+
     }
 
     private void drawStone(Graphics g, int boardX, int boardY, int row, int col, Color colorStone, Color colorStoneOutline) {

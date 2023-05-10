@@ -28,18 +28,18 @@ public class Frame extends JFrame implements ActionListener {
         JMenuBar menubar = new JMenuBar();
         setJMenuBar(menubar);
 
-        // top level buttons
+        // top level menu
         JMenu menuGame = addMenu(menubar, "Game");
         JMenu menuSettings = addMenu(menubar, "Settings");
 
-        // game buttons
+        // game menu
         JMenu gamePlay = addSubMenu(menuGame, "Play");
         gamePlayerVsPlayer = addMenuItem(gamePlay, "Player vs player");
         gamePlayerVsComputer = addMenuItem(gamePlay, "Player vs computer");
         gameComputerVsPlayer = addMenuItem(gamePlay, "Computer vs player");
         gameComputerVsComputer = addMenuItem(gamePlay, "Computer vs Computer");
 
-        // settings buttons
+        // settings menu
         JMenu settingsTheme = addSubMenu(menuSettings, "Theme");
         settingsLightTheme = addMenuItem(settingsTheme, "Light Theme");
         settingsTheme.addSeparator();
