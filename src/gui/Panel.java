@@ -122,6 +122,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
         String turnText;
         if (igra.state == Igra.CAPTURED_BLACK) {
+            //mogoče sta ravno obrnjeni
             turnText = "BLACK has won.";
         }
         else if (igra.state == Igra.CAPTURED_WHITE) {
