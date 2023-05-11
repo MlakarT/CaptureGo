@@ -77,6 +77,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         Graphics2D g2 = (Graphics2D) g;
 
         // drawing the background:
+        System.out.println(igra.state);
         g.setColor(colorBackground);
         g.fillRect(0, 0, getWidth(), getHeight());
 
@@ -119,44 +120,22 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // drawing the player's turn:
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
-        String player1;
-        String player2;
         String turnText;
-        if (vrstaIgralca.get(Igra.BLACK_STATE) == PlayerType.C) {
-            if (vrstaIgralca.get(Igra.WHITE_STATE) == PlayerType.C) {
-                player1 = "first player";
-                player2 = "second player";
-            }
-            else {
-                player1 = "player";
-                player2 = "computer";
-            }
-        }
-        else {
-            if (vrstaIgralca.get(Igra.WHITE_STATE) == PlayerType.C) {
-                player1 = "computer";
-                player2 = "player";
-            }
-            else {
-                player1 = "first computer";
-                player2 = "second computer";
-            }
-        }
         if (igra.state == Igra.CAPTURED_BLACK) {
-            turnText = player1 + " has won.";
+            turnText = "BLACK has won.";
         }
         else if (igra.state == Igra.CAPTURED_WHITE) {
-            turnText = player2 + " has won.";
+            turnText = "WHITE has won.";
         }
         else if (igra.state == Igra.BLACK_STATE) {
-            turnText = "It's " + player1 + "'s turn.";
+            turnText = "It's BLACK's turn.";
         }
         else {
-            turnText = "It's " + player2 + "'s turn.";
+            turnText = "It's WHITE's turn.";
         }
         int textWidth = g.getFontMetrics().stringWidth(turnText);
         int textX = (getWidth() - textWidth) / 2;
-        int textY = 2 * boardY / 3;
+        int textY = boardY / 2;
         g.drawString(turnText, textX, textY);
 
     }
