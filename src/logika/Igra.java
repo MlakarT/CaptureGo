@@ -21,6 +21,7 @@ public class Igra {
     protected static final Poteza[] directions = {new Poteza(1,0), new Poteza(-1, 0), new Poteza(0,1), new Poteza(0, -1)};
     private HashMap<KdoIgra, Integer> players;
     public List<Group> groups;
+    //todo make record field poteze to call instead of calculating poteze() everytime, just remove from list once its played
 
     public Igra() {
         size = 9;
@@ -75,7 +76,7 @@ public class Igra {
         return null;
     }
 
-    private int groupState(Group g) {
+    public int groupState(Group g) {
         return g.group.get(g.group.keySet().iterator().next());
     }
 
@@ -174,6 +175,8 @@ public class Igra {
                     g.group.replace(p, locState);
                     this.grid[p.y()][p.x()] = locState;
                 }
+                state = groupState(g);
+                //System.out.println("Game over " + state);
                 return g;
             }
         }

@@ -28,8 +28,8 @@ public class Vodja {
     public static Igra game = null;
     public static boolean clovekNaVrsti = false;
 
-    public static Inteligenca inteligenca = new RandomMove();
-    //public static Inteligenca inteligenca = new Minimax(1);
+    //public static Inteligenca inteligenca = new RandomMove();
+    public static Inteligenca inteligenca = new Minimax(2);
     //public static Inteligenca inteligenca = new AlphaBeta();
 
     public static void playNewGame() {
@@ -56,7 +56,7 @@ public class Vodja {
         SwingWorker<Poteza, Void> worker = new SwingWorker<>() {
             @Override
             protected Poteza doInBackground() {
-                try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
+                //try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
                 return inteligenca.izberiPotezo(game);
             }
             @Override
