@@ -18,6 +18,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
+    protected int index;
     protected Color colorBackground;
     protected Color colorBoard;
     protected Color colorGrid;
@@ -41,6 +42,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // initial values:
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
+        index = 0;
 
         // initializing color constants:
         colorBackground = ColorConstants.LIGHT_BACKGROUND;
@@ -77,7 +79,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         Graphics2D g2 = (Graphics2D) g;
 
         // drawing the background:
-        System.out.println(igra.state);
         g.setColor(colorBackground);
         g.fillRect(0, 0, getWidth(), getHeight());
 
@@ -121,18 +122,22 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
         String turnText;
-        if (igra.state == Igra.CAPTURED_BLACK) {
-            //mogoče sta ravno obrnjeni
-            turnText = "BLACK has won.";
-        }
-        else if (igra.state == Igra.CAPTURED_WHITE) {
-            turnText = "WHITE has won.";
-        }
-        else if (igra.state == Igra.BLACK_STATE) {
+        if (igra.state == Igra.BLACK_STATE) {
             turnText = "It's BLACK's turn.";
+            index = 1;
+        }
+        else if (igra.state == Igra.WHITE_STATE){
+            turnText = "It's WHITE's turn.";
+            index = 2;
         }
         else {
-            turnText = "It's WHITE's turn.";
+            if (index == 2) {
+                turnText = "WHITE has won.";
+            }
+            else {
+                turnText = "BLACK has won.";
+            }
+            index = 0;
         }
         int textWidth = g.getFontMetrics().stringWidth(turnText);
         int textX = (getWidth() - textWidth) / 2;
