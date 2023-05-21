@@ -9,6 +9,7 @@ import java.util.concurrent.TimeUnit;
 
 import gui.Frame;
 import inteligenca.Inteligenca;
+import inteligenca.OceniPozicijo;
 import inteligenca.RandomMove;
 import logika.Igra;
 import logika.Igra.*;
@@ -29,7 +30,7 @@ public class Vodja {
     public static boolean clovekNaVrsti = false;
 
     //public static Inteligenca inteligenca = new RandomMove();
-    public static Inteligenca inteligenca = new Minimax(2);
+    public static Inteligenca inteligenca = new Minimax(4);
     //public static Inteligenca inteligenca = new AlphaBeta();
 
     public static void playNewGame() {
@@ -75,6 +76,7 @@ public class Vodja {
 
     public static boolean playHumanTurn (Poteza poteza) {
         if (game.odigraj(poteza)) {
+            //System.out.println(OceniPozicijo.oceniPozicijo(game, game.nasprotnik()));
             clovekNaVrsti = false;
             play();
             return true;

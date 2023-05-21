@@ -192,6 +192,10 @@ public class Igra {
         }
         return poteze;
     }
+
+    public int nasprotnik() {
+        return (this.state == BLACK_STATE ? WHITE_STATE : BLACK_STATE);
+    }
     public void printGame() {
         for (int i = 0; i < this.size; ++i) {
             System.out.print("|");
