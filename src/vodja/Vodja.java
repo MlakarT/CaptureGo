@@ -30,7 +30,7 @@ public class Vodja {
     public static boolean clovekNaVrsti = false;
 
     //public static Inteligenca inteligenca = new RandomMove();
-    public static Inteligenca inteligenca = new Minimax(4);
+    public static Inteligenca inteligenca = new Minimax(3);
     //public static Inteligenca inteligenca = new AlphaBeta();
 
     public static void playNewGame() {
