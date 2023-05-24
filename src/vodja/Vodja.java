@@ -65,6 +65,7 @@ public class Vodja {
                 Poteza poteza = null;
                 try {poteza = get();} catch (Exception e) {};
                 if (game == startGame && poteza != null) {
+                    System.out.println("Picked " + poteza);
                     inteligenca.igrajPotezo(game,poteza);
                     frame.repaint();
                     play();

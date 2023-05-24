@@ -25,7 +25,7 @@ public class OceniPozicijo {
         }
         int cost;
         int costYou = 0;
-        for (Group g : yourGroups) {costYou += g.liberties.size() + g.group.size() * modifier;}
+        for (Group g : yourGroups) {costYou += g.liberties.size() + g.group.size() * g.group.size();}
         int costOpponent = 0;
         for (Group g : opponentGroups) {costOpponent += g.liberties.size();}
         switch (igra.state) {
@@ -35,7 +35,7 @@ public class OceniPozicijo {
                 cost = costYou - costOpponent;
             }
         }
-        System.out.println("Current game cost is " + cost + " for " + (state == Igra.BLACK_STATE ? "black" : "white"));
+        //System.out.println("Current game cost is " + cost + " for " + (state == Igra.BLACK_STATE ? "black" : "white"));
         return cost;
     }
 
@@ -49,7 +49,7 @@ public class OceniPozicijo {
             }// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
             default -> {
                 boolean me = (igra.state == state);
-                float cost = 1;
+                float cost = 100f;
                 List<Group> yourGroups = new LinkedList<>();
                 List<Group> opponentGroups = new LinkedList<>();
                 for (Group g : igra.groups) {
@@ -58,13 +58,13 @@ public class OceniPozicijo {
                 }
                 if (me) {
                     for (Group g : opponentGroups) {
-                        float costF = 1 + ((float) g.liberties.size() / (2 * (float) g.group.size() + 2));
-                        cost = 100 * Math.max(cost, costF);
+                        float costF = 1f + ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+                        cost =  Math.max(cost, 100f *costF);
                     }
                 } else {
                     for (Group g : yourGroups) {
-                        float costF = 1 - ((float) g.liberties.size() / (2 * (float) g.group.size() + 2));
-                        cost = 100 * Math.min(cost, costF);
+                        float costF = 1f - ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+                        cost =  Math.min(cost, 100f * costF);
                     }
                 }
                 System.out.println("Calculated procenti cost of "+ cost);
@@ -72,5 +72,4 @@ public class OceniPozicijo {
             }
         }
     }
-
 }
