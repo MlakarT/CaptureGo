@@ -1,5 +1,6 @@
 package inteligenca;
 
+import java.sql.SQLOutput;
 import java.util.List;
 
 import logika.Igra;
@@ -32,7 +33,7 @@ public class Minimax extends Inteligenca {
             Igra kopija = Igra.copy(igra);
             kopija.odigraj(p);
             //check if we've reached either the end of minimax or end of game
-            if (globina == 1 || igra.state == Igra.CAPTURED_BLACK || igra.state == Igra.CAPTURED_WHITE) {
+            if (globina == 1 || kopija.state == Igra.CAPTURED_BLACK || kopija.state == Igra.CAPTURED_WHITE) {
                 if (me) { //if my turn then take highest
                     ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza,
                             new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(kopija, igra.state)));
