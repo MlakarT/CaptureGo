@@ -2,7 +2,6 @@ package gui;
 
 import logika.Igra;
 import splosno.Poteza;
-import vodja.PlayerType;
 import vodja.Vodja;
 
 import javax.swing.*;
@@ -44,7 +43,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         playerOutlineWidth = new BasicStroke(2);
         index = 0;
 
-        // initializing color constants:
+        // initial color constants:
         colorBackground = ColorConstants.LIGHT_BACKGROUND;
         colorBoard = ColorConstants.LIGHT_BOARD;
         colorGrid = ColorConstants.LIGHT_GRID;
@@ -118,34 +117,27 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
             }
         }
 
-        // drawing the player's turn:
+        // drawing top text (whose turn it is/who has won):
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
-        String turnText;
-        if (igra.state == Igra.BLACK_STATE) {
-            turnText = "It's BLACK's turn.";
-            index = 1;
+        String text;
+        if (igra.state == Igra.CAPTURED_BLACK || igra.state == Igra.CAPTURED_WHITE) {
+            text = "Game over.";
         }
-        else if (igra.state == Igra.WHITE_STATE){
-            turnText = "It's WHITE's turn.";
-            index = 2;
+        else if (igra.state == Igra.BLACK_STATE) {
+            text = "It's BLACK's turn.";
         }
         else {
-            if (index == 2) {
-                turnText = "WHITE has won.";
-            }
-            else {
-                turnText = "BLACK has won.";
-            }
-            index = 0;
+            text = "It's WHITE's turn.";
         }
-        int textWidth = g.getFontMetrics().stringWidth(turnText);
+        int textWidth = g.getFontMetrics().stringWidth(text);
         int textX = (getWidth() - textWidth) / 2;
         int textY = boardY / 2;
-        g.drawString(turnText, textX, textY);
+        g.drawString(text, textX, textY);
 
     }
 
+    // method that gets rid of duplicate code for drawing stones in paintComponent()
     private void drawStone(Graphics g, int boardX, int boardY, int row, int col, Color colorStone, Color colorStoneOutline) {
         g.setColor(colorStone);
         g.fillOval(boardX + col * cellSize - radius / 2, boardY + row * cellSize - radius / 2, radius, radius);
@@ -155,8 +147,10 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
 
     @Override
     public void mouseClicked(MouseEvent e) {
+        // check if the game is running and is not over
         if (igra == null) return;
         if (igra.gameOver() != null) return;
+        // if it's the human player's turn, listen for the mouse click
         if (vrstaIgralca.get(igra.state) == C) {
             int x = e.getX();
             int y = e.getY();
@@ -173,7 +167,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
 
     }
 
-    // making the board resizeable based on the panel size:
+    // making the board resizeable based on panel size:
     @Override
     public void componentResized(ComponentEvent e) {
         Component c = e.getComponent();

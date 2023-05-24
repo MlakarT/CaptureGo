@@ -11,7 +11,6 @@ import java.util.HashMap;
 
 public class Frame extends JFrame implements ActionListener {
     protected Panel panel;
-    protected Igra game;
     protected JPanel buttonPanel;
     protected JButton pvpButton, pvcButton, cvpButton, cvcButton;
     private final JMenuItem gamePlayerVsPlayer, gamePlayerVsComputer, gameComputerVsPlayer, gameComputerVsComputer;
@@ -56,6 +55,7 @@ public class Frame extends JFrame implements ActionListener {
         menuPlayerWhiteColor = addMenuItem(settingsColorPicker, "Second player color");
         menuPlayerWhiteOutlineColor = addMenuItem(settingsColorPicker, "Second player outline color");
 
+        // buttons at the start:
         buttonPanel = new JPanel();
         buttonPanel.setPreferredSize(new Dimension(800, 800));
         buttonPanel.setLayout(new GridBagLayout());
@@ -91,11 +91,10 @@ public class Frame extends JFrame implements ActionListener {
         gbc.gridy = 1;
         buttonPanel.add(cvcButton, gbc);
 
+        // centering the buttons:
         add(buttonPanel, BorderLayout.CENTER);
 
-        //todo game related info
-        // menubar.add(Game.info(game));
-
+        // terminate the application when the window is closed:
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
@@ -117,14 +116,11 @@ public class Frame extends JFrame implements ActionListener {
         return subMenu;
     }
 
-    /**
-     * Invoked when an action occurs.
-     *
-     * @param e the event to be processed
-     */
     @Override
     public void actionPerformed(ActionEvent e) {
         Object object = e.getSource();
+        // if buttons or listed menu options are clicked, the buttons will disappear and the panel
+        // will reappear instead, starting the game based on the user's choice
         if (object == gamePlayerVsPlayer || object == pvpButton) {
             remove(buttonPanel);
             add(panel);
@@ -133,6 +129,7 @@ public class Frame extends JFrame implements ActionListener {
             Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
             Vodja.playNewGame();
             panel.igra = Vodja.game;
+            // repaints the panel (repaint() did not work as it should so stackoverflow suggested this instead):
             SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == gamePlayerVsComputer || object == pvcButton) {
@@ -165,6 +162,7 @@ public class Frame extends JFrame implements ActionListener {
             panel.igra = Vodja.game;
             SwingUtilities.updateComponentTreeUI(panel);
         }
+        // options for changing the theme/individual colors:
         else if (object == settingsLightTheme) {
             panel.colorBackground = ColorConstants.LIGHT_BACKGROUND;
             panel.colorBoard = ColorConstants.LIGHT_BOARD;
