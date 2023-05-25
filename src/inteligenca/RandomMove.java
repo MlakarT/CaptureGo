@@ -12,9 +12,8 @@ public class RandomMove extends Inteligenca {
     @Override
     public Poteza izberiPotezo (Igra igra) {
         Random r = new Random();
-        List<Poteza> poteze = igra.poteze();
-        int n = poteze.size();
-        return poteze.get(r.nextInt(n-1));
+        int n = igra.poteze.size();
+        return igra.poteze.get(r.nextInt(n-1));
     }
 
     @Override

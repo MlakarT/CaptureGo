@@ -4,15 +4,10 @@ package vodja;
 import java.util.Map;
 
 import javax.swing.SwingWorker;
-import java.util.Random;
-import java.util.concurrent.TimeUnit;
 
 import gui.Frame;
 import inteligenca.Inteligenca;
-import inteligenca.OceniPozicijo;
-import inteligenca.RandomMove;
 import logika.Igra;
-import logika.Igra.*;
 import logika.Igralec;
 
 import inteligenca.Minimax;
@@ -57,7 +52,6 @@ public class Vodja {
         SwingWorker<Poteza, Void> worker = new SwingWorker<>() {
             @Override
             protected Poteza doInBackground() {
-                //try {TimeUnit.SECONDS.sleep(1);} catch (Exception e) {};
                 return inteligenca.izberiPotezo(game);
             }
             @Override
@@ -65,7 +59,6 @@ public class Vodja {
                 Poteza poteza = null;
                 try {poteza = get();} catch (Exception e) {};
                 if (game == startGame && poteza != null) {
-                    System.out.println("Picked " + poteza);
                     inteligenca.igrajPotezo(game,poteza);
                     frame.repaint();
                     play();
@@ -77,7 +70,6 @@ public class Vodja {
 
     public static boolean playHumanTurn (Poteza poteza) {
         if (game.odigraj(poteza)) {
-            //System.out.println(OceniPozicijo.oceniPozicijo(game, game.nasprotnik()));
             clovekNaVrsti = false;
             play();
             return true;

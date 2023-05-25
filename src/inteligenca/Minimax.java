@@ -28,18 +28,19 @@ public class Minimax extends Inteligenca {
 
     public OcenjenaPoteza minimax(Igra igra, int globina, boolean me) {
         OcenjenaPoteza ocenjenaPoteza = null;
-        List<Poteza> moznePoteze = igra.poteze();
-        for (Poteza p : moznePoteze) {
+        for (Poteza p : igra.poteze) {
             Igra kopija = Igra.copy(igra);
             kopija.odigraj(p);
             //check if we've reached either the end of minimax or end of game
             if (globina == 1 || kopija.state == Igra.CAPTURED_BLACK || kopija.state == Igra.CAPTURED_WHITE) {
+                //int ocena = ((igra.state == Igra.BLACK_STATE && kopija.state == Igra.CAPTURED_WHITE) ||
+                //        (igra.state == Igra.WHITE_STATE && kopija.state == Igra.CAPTURED_BLACK) ? OceniPozicijo.WIN : OceniPozicijo.LOSS);
                 if (me) { //if my turn then take highest
                     ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza,
                             new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(kopija, igra.state)));
                 } else { //else take lowest
                     ocenjenaPoteza = OcenjenaPoteza.min(ocenjenaPoteza,
-                            new OcenjenaPoteza(p, OceniPozicijo.oceniPozicijo(kopija, igra.state)));
+                            new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(kopija, igra.state)));
                 }
             } else if (me) { // if my turn
                 ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza, minimax(kopija, globina - 1, false));

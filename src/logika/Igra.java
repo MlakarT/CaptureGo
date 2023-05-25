@@ -23,11 +23,18 @@ public class Igra {
     public List<Group> groups;
     //todo make record field poteze to call instead of calculating poteze() everytime, just remove from list once its played
 
+    public List<Poteza> poteze;
     public Igra() {
         size = 9;
         grid = makeGrid(size);
         state = BLACK_STATE;
         groups = new LinkedList<>();
+        poteze = new LinkedList<>();
+        for (int i = 0; i < size; ++i) {
+            for (int j = 0; j < size; ++j) {
+                poteze.add(new Poteza(j,i));
+            }
+        }
     }
     private int[][] makeGrid (int n) {
         grid = new int[n][n];
@@ -112,9 +119,9 @@ public class Igra {
         // used mostly for testing purposes, as the game closes immediately
         if (this.grid[poteza.y()][poteza.x()] == 0 && !isSuicide(poteza)) {
             this.grid[poteza.y()][poteza.x()] = this.state;
+            poteze.remove(poteza);
             //System.out.println(poteza +" is alone " + this.isAlone(poteza));
             //todo check if poteza is alone
-            //todo okej tuki skos ne pride
             if (!this.isAlone(poteza)) {
                 for (Poteza dir : directions) {
                     //todo find the first nonempty group
@@ -221,6 +228,9 @@ public class Igra {
         for (int i = 0; i < igra.size; ++i) {
             for (int j = 0; j < igra.size; ++j) {
                 kopija.grid[j][i] = igra.grid[j][i];
+                if (igra.grid[j][i] != 0) {
+                    kopija.poteze.remove(new Poteza(i,j));
+                }
             }
         }
         kopija.resetAllGroups();

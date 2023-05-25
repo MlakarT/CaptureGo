@@ -25,7 +25,7 @@ public class OceniPozicijo {
         }
         int cost;
         int costYou = 0;
-        for (Group g : yourGroups) {costYou += g.liberties.size() + g.group.size() * g.group.size();}
+        for (Group g : yourGroups) {costYou += g.liberties.size() + g.group.size() * g.group.size() * g.group.size();}
         int costOpponent = 0;
         for (Group g : opponentGroups) {costOpponent += g.liberties.size();}
         switch (igra.state) {
@@ -40,36 +40,71 @@ public class OceniPozicijo {
     }
 
     private static int oceniPozicijoProcenti (Igra igra, int state) {
-        switch (igra.state) {
-            case Igra.CAPTURED_BLACK -> {
-                return (state == Igra.WHITE_STATE ? WIN : LOSS);
-            }
-            case Igra.CAPTURED_WHITE -> {
-                return (state == Igra.BLACK_STATE ? WIN : LOSS);
-            }// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
-            default -> {
-                boolean me = (igra.state == state);
-                float cost = 100f;
-                List<Group> yourGroups = new LinkedList<>();
-                List<Group> opponentGroups = new LinkedList<>();
-                for (Group g : igra.groups) {
-                    if (igra.groupState(g) == state) yourGroups.add(g);
-                    else opponentGroups.add(g);
+        //int me = igra.nasprotnik();
+        //float cost = 100f;
+        //for (Group g : igra.groups) {
+        //    if (igra.groupState(g) == me) {
+        //        float costF = 1f + ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+        //        cost =  Math.max(cost, 100f * costF);
+        //    } else {
+        //        float costF = 1f - ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+        //        cost =  Math.min(cost, 100f * costF);
+        //
+        //    }
+        //}
+        //return (int) cost;
+
+        //int state = igra.nasprotnik();
+        //boolean me1 = false;
+        //List<Group> yourGroups = new LinkedList<>();
+        //List<Group> opponentGroups = new LinkedList<>();
+        //for (Group g : igra.groups) {
+        //    if (igra.groupState(g) == state) yourGroups.add(g);
+        //    else opponentGroups.add(g);
+        //}
+        //if (me1) {
+        //    for (Group g : opponentGroups) {
+        //        float costF = 100f + 100f *  ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+        //        cost =  Math.max(cost, costF);
+        //    }
+        //} else {
+        //    for (Group g : yourGroups) {
+        //        float costF = 1f - ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+        //        cost =  Math.min(cost, 100f * costF);
+        //    }
+        //}
+                //System.out.println("Calculated procenti cost of "+ cost);
+        //return (int) cost;
+            switch (igra.state) {
+                case Igra.CAPTURED_BLACK -> {
+                    return (state == Igra.WHITE_STATE ? WIN : LOSS);
                 }
-                if (me) {
-                    for (Group g : opponentGroups) {
-                        float costF = 1f + ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
-                        cost =  Math.max(cost, 100f *costF);
+                case Igra.CAPTURED_WHITE -> {
+                    return (state == Igra.BLACK_STATE ? WIN : LOSS);
+                }// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
+                default -> {
+                    boolean me = (igra.state == state);
+                    float cost = 100f;
+                    List<Group> yourGroups = new LinkedList<>();
+                    List<Group> opponentGroups = new LinkedList<>();
+                    for (Group g : igra.groups) {
+                        if (igra.groupState(g) == state) yourGroups.add(g);
+                        else opponentGroups.add(g);
                     }
-                } else {
-                    for (Group g : yourGroups) {
-                        float costF = 1f - ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
-                        cost =  Math.min(cost, 100f * costF);
+                    if (me) {
+                        for (Group g : opponentGroups) {
+                            float costF = 1f + ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+                            cost =  Math.max(cost, 100f *costF);
+                        }
+                    } else {
+                        for (Group g : yourGroups) {
+                            float costF = 1f - ((float) g.liberties.size() / (2f * (float) g.group.size() + 2f));
+                            cost =  Math.min(cost, 100f * costF);
+                        }
                     }
+                    System.out.println("Calculated procenti cost of "+ cost);
+                    return (int) cost;
                 }
-                System.out.println("Calculated procenti cost of "+ cost);
-                return (int) cost;
             }
-        }
     }
 }
