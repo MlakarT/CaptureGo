@@ -19,6 +19,10 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     private int cellSize;
 
     protected Igra2 igra;
+
+    protected int gameSize;
+    protected KdoIgra player1;
+    protected KdoIgra player2;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
@@ -31,7 +35,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     protected Color colorPlayerWhiteOutline;
     protected Color colorCapturedBlock;
 
-    public Panel(int panelWidth, int panelHeight, int gameSize, KdoIgra player1, KdoIgra player2) {
+    public Panel(int panelWidth, int panelHeight) {
         super();
         setGameState(new Igra2(gameSize, player1, player2));
         addMouseListener(this);

@@ -3,6 +3,7 @@ package gui2;
 import gui2.ColorConstants;
 import gui2.Panel;
 import logika2.Igra2;
+import splosno.KdoIgra;
 import vodja2.PlayerType;
 import vodja2.Vodja2;
 
@@ -13,7 +14,7 @@ import java.awt.event.ActionListener;
 import java.util.HashMap;
 
 public class Frame extends JFrame implements ActionListener {
-    protected gui.Panel panel;
+    protected gui2.Panel panel;
     protected JPanel buttonPanel;
     protected JButton pvpButton, pvcButton, cvpButton, cvcButton;
     private final JMenuItem gamePlayerVsPlayer, gamePlayerVsComputer, gameComputerVsPlayer, gameComputerVsComputer;
@@ -24,7 +25,7 @@ public class Frame extends JFrame implements ActionListener {
     public Frame() {
         super();
         setTitle("Play Capture Go");
-        panel = new Panel(800,800 /* gamesize, player1, player2*/);
+        panel = new Panel(800,800);
         add(panel);
 
         JMenuBar menubar = new JMenuBar();
@@ -127,63 +128,83 @@ public class Frame extends JFrame implements ActionListener {
         if (object == gamePlayerVsPlayer || object == pvpButton) {
             remove(buttonPanel);
             add(panel);
-            Vodja.vrstaIgralca = new HashMap<>();
-            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
-            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
-            Vodja.playNewGame();
-            panel.igra = Vodja.game;
+            Vodja2.vrstaIgralca = new HashMap<>();
+            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.C);
+            Vodja2.vrstaIgralca.put(Igra2.white , PlayerType.C);
+            KdoIgra black = new KdoIgra("Black Player");
+            KdoIgra white = new KdoIgra("White Player");
+            Vodja2.playNewGame(9 /*tukej se spremeni size*/, black, white);
+            panel.igra = Vodja2.igra;
+            panel.gameSize = 9; /* pa tuki isto*/
+            panel.player1 = black; // also kle lahko displayas zdej kdo je navrst poimensko
+            panel.player2 = white;
             // repaints the panel (repaint() did not work as it should so stackoverflow suggested this instead):
             SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == gamePlayerVsComputer || object == pvcButton) {
             remove(buttonPanel);
             add(panel);
-            Vodja.vrstaIgralca = new HashMap<>();
-            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.C);
-            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
-            Vodja.playNewGame();
-            panel.igra = Vodja.game;
+            Vodja2.vrstaIgralca = new HashMap<>();
+            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.C);
+            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.R);
+            KdoIgra black = new KdoIgra("Black Player");
+            KdoIgra white = new KdoIgra("Computer");
+            Vodja2.playNewGame(9 /* change this*/, black, white);
+            panel.igra = Vodja2.igra;
+            panel.gameSize = 9;
+            panel.player1 = black;
+            panel.player2 = white;
             SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == gameComputerVsPlayer || object == cvpButton) {
             remove(buttonPanel);
             add(panel);
-            Vodja.vrstaIgralca = new HashMap<>();
-            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
-            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.C);
-            Vodja.playNewGame();
-            panel.igra = Vodja.game;
+            Vodja2.vrstaIgralca = new HashMap<>();
+            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.R);
+            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.C);
+            KdoIgra black = new KdoIgra("Computer");
+            KdoIgra white = new KdoIgra("White Player");
+            Vodja2.playNewGame(9 /* change this */, black, white);
+            panel.igra = Vodja2.igra;
+            panel.gameSize = 9;
+            panel.player1 = black;
+            panel.player2 = white;
             SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == gameComputerVsComputer || object == cvcButton) {
             remove(buttonPanel);
             add(panel);
-            Vodja.vrstaIgralca = new HashMap<>();
-            Vodja.vrstaIgralca.put(Igra.BLACK_STATE, PlayerType.R);
-            Vodja.vrstaIgralca.put(Igra.WHITE_STATE, PlayerType.R);
-            Vodja.playNewGame();
-            panel.igra = Vodja.game;
+            Vodja2.vrstaIgralca = new HashMap<>();
+            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.R);
+            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.R);
+            KdoIgra black = new KdoIgra("Black Computer");
+            KdoIgra white = new KdoIgra("White Computer");
+            Vodja2.playNewGame(9/*and this*/, black, white);
+            panel.igra = Vodja2.igra;
+            panel.gameSize = 9;
+            panel.player1 = black;
+            panel.player2 = white;
             SwingUtilities.updateComponentTreeUI(panel);
         }
         // options for changing the theme/individual colors:
         else if (object == settingsLightTheme) {
-            panel.colorBackground = gui.ColorConstants.LIGHT_BACKGROUND;
-            panel.colorBoard = gui.ColorConstants.LIGHT_BOARD;
-            panel.colorGrid = gui.ColorConstants.LIGHT_GRID;
-            panel.colorPlayerBlack = gui.ColorConstants.LIGHT_PLAYER_BLACK;
-            panel.colorPlayerBlackOutline = gui.ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
-            panel.colorPlayerWhite = gui.ColorConstants.LIGHT_PLAYER_WHITE;
-            panel.colorPlayerWhiteOutline = gui.ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
-            panel.colorCapturedBlock = gui.ColorConstants.LIGHT_CAPTURED_BLOCK;
+            panel.colorBackground = ColorConstants.LIGHT_BACKGROUND;
+            panel.colorBoard = ColorConstants.LIGHT_BOARD;
+            panel.colorGrid = ColorConstants.LIGHT_GRID;
+            panel.colorPlayerBlack = ColorConstants.LIGHT_PLAYER_BLACK;
+            panel.colorPlayerBlackOutline = ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
+            panel.colorPlayerWhite = ColorConstants.LIGHT_PLAYER_WHITE;
+            panel.colorPlayerWhiteOutline = ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
+            panel.colorCapturedBlock = ColorConstants.LIGHT_CAPTURED_BLOCK;
         }
         else if (object == settingsDarkTheme) {
-            panel.colorBackground = gui.ColorConstants.DARK_BACKGROUND;
-            panel.colorBoard = gui.ColorConstants.DARK_BOARD;
-            panel.colorGrid = gui.ColorConstants.DARK_GRID;
-            panel.colorPlayerBlack = gui.ColorConstants.DARK_PLAYER_BLACK;
-            panel.colorPlayerBlackOutline = gui.ColorConstants.DARK_PLAYER_BLACK_OUTLINE;
-            panel.colorPlayerWhite = gui.ColorConstants.DARK_PLAYER_WHITE;
-            panel.colorPlayerWhiteOutline = gui.ColorConstants.DARK_PLAYER_WHITE_OUTLINE;
+            panel.colorBackground = ColorConstants.DARK_BACKGROUND;
+            panel.colorBoard = ColorConstants.DARK_BOARD;
+            panel.colorGrid = ColorConstants.DARK_GRID;
+            panel.colorPlayerBlack = ColorConstants.DARK_PLAYER_BLACK;
+            panel.colorPlayerBlackOutline = ColorConstants.DARK_PLAYER_BLACK_OUTLINE;
+            panel.colorPlayerWhite = ColorConstants.DARK_PLAYER_WHITE;
+            panel.colorPlayerWhiteOutline = ColorConstants.DARK_PLAYER_WHITE_OUTLINE;
             panel.colorCapturedBlock = ColorConstants.DARK_CAPTURED_BLOCK;
         }
         else if (object == menuBackgroundColor) {
