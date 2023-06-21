@@ -1,11 +1,9 @@
 package gui2;
 
-import gui.ColorConstants;
 import logika.Igra;
 import logika2.Igra2;
 import splosno.KdoIgra;
 import splosno.Poteza;
-import vodja.Vodja;
 import vodja2.Vodja2;
 
 import javax.swing.*;
@@ -15,16 +13,15 @@ import java.awt.event.ComponentListener;
 import java.awt.event.MouseEvent;
 import java.awt.event.MouseListener;
 
-import static vodja.PlayerType.C;
-import static vodja.Vodja.vrstaIgralca;
+import static vodja2.PlayerType.C;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
     private int cellSize;
+
     protected Igra2 igra;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
-    protected int index;
     protected Color colorBackground;
     protected Color colorBoard;
     protected Color colorGrid;
@@ -34,9 +31,9 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     protected Color colorPlayerWhiteOutline;
     protected Color colorCapturedBlock;
 
-    public Panel(int panelWidth, int panelHeight) {
+    public Panel(int panelWidth, int panelHeight, int gameSize, KdoIgra player1, KdoIgra player2) {
         super();
-        setGameState(new Igra());
+        setGameState(new Igra2(gameSize, player1, player2));
         addMouseListener(this);
         addComponentListener(this);
         setFocusable(true);
@@ -48,16 +45,15 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // initial values:
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        index = 0;
 
         // initial color constants:
-        colorBackground = gui.ColorConstants.LIGHT_BACKGROUND;
-        colorBoard = gui.ColorConstants.LIGHT_BOARD;
-        colorGrid = gui.ColorConstants.LIGHT_GRID;
-        colorPlayerBlack = gui.ColorConstants.LIGHT_PLAYER_BLACK;
-        colorPlayerBlackOutline = gui.ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
-        colorPlayerWhite = gui.ColorConstants.LIGHT_PLAYER_WHITE;
-        colorPlayerWhiteOutline = gui.ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
+        colorBackground = ColorConstants.LIGHT_BACKGROUND;
+        colorBoard = ColorConstants.LIGHT_BOARD;
+        colorGrid = ColorConstants.LIGHT_GRID;
+        colorPlayerBlack = ColorConstants.LIGHT_PLAYER_BLACK;
+        colorPlayerBlackOutline = ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
+        colorPlayerWhite = ColorConstants.LIGHT_PLAYER_WHITE;
+        colorPlayerWhiteOutline = ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
         colorCapturedBlock = ColorConstants.LIGHT_CAPTURED_BLOCK;
 
     }
@@ -169,7 +165,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
             int col = (x - boardX + cellSize / 2) / cellSize;
             int row = (y - boardY + cellSize / 2) / cellSize;
             Poteza poteza = new Poteza(col, row);
-            if (Vodja.playHumanTurn(poteza)) repaint();
+            if (Vodja2.playHumanTurn(poteza)) repaint();
         }
 
     }

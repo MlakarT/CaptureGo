@@ -55,4 +55,16 @@ public class Vodja2 {
         };
         worker.execute();
     }
+
+    public static boolean playHumanTurn(Poteza poteza) {
+        if (igra.grid[poteza.y()][poteza.x()] == '\0') {
+            igra.playMove(poteza);
+            igra.setGroups();
+            igra.naVrsti = igra.nasprotnik();
+            clovekNaVrsti = false;
+            play();
+            return true;
+        }
+        return false;
+    }
 }
