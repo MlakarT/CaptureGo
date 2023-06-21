@@ -1,5 +1,5 @@
 package logika;
 
 public enum Igralec {
-    R, C;
+   BLACK, WHITE
 }

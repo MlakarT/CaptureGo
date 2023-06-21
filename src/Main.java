@@ -10,10 +10,13 @@ public class Main {
     public static void main(String[] args) {
         //todo stuff comes here
         //Igra igra = new Igra();
-        //System.out.println(igra.poteze());
+        //System.out.println(igra.poteze()+ "\n" + igra.state);
         //igra.odigraj(new Poteza(0,0));
-        //System.out.println(igra.poteze());
-        // Igra.poteze works as intended
+        //System.out.println(igra.poteze()+ "\n" + igra.state);
+        //System.out.println(igra.groups);
+        //igra.odOdigraj(new Poteza(0,0));
+        //System.out.println(igra.poteze()+ "\n" + igra.state);
+        //System.out.println(igra.groups + "\n");
 
         //todo launch game
         gui.Frame frame = new gui.Frame();

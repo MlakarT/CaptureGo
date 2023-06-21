@@ -17,8 +17,9 @@ public class Minimax extends Inteligenca {
     }
     @Override
     public Poteza izberiPotezo (Igra igra) {
-        OcenjenaPoteza najboljsaPoteza = minimax(igra, this.globina, true);
-        return najboljsaPoteza.poteza;
+        //OcenjenaPoteza najboljsaPoteza = minimax(igra, this.globina, true);
+        //return najboljsaPoteza.poteza;
+        return najboljsaPoteza(igra).poteza;
     }
 
     @Override
@@ -29,24 +30,30 @@ public class Minimax extends Inteligenca {
     public OcenjenaPoteza minimax(Igra igra, int globina, boolean me) {
         OcenjenaPoteza ocenjenaPoteza = null;
         for (Poteza p : igra.poteze) {
-            Igra kopija = Igra.copy(igra);
-            kopija.odigraj(p);
+            System.out.println("testing poteza " + p + " at depth " + globina);
+            igra.odigraj(p);
             //check if we've reached either the end of minimax or end of game
-            if (globina == 1 || kopija.state == Igra.CAPTURED_BLACK || kopija.state == Igra.CAPTURED_WHITE) {
-                //int ocena = ((igra.state == Igra.BLACK_STATE && kopija.state == Igra.CAPTURED_WHITE) ||
-                //        (igra.state == Igra.WHITE_STATE && kopija.state == Igra.CAPTURED_BLACK) ? OceniPozicijo.WIN : OceniPozicijo.LOSS);
+            if (globina == 1 || igra.state == Igra.WHITE_WIN || igra.state == Igra.BLACK_WIN) {
+                System.out.println("reached globina " + globina + " or end of game");
                 if (me) { //if my turn then take highest
                     ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza,
-                            new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(kopija, igra.state)));
+                            new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(igra, igra.nasprotnik())));
                 } else { //else take lowest
                     ocenjenaPoteza = OcenjenaPoteza.min(ocenjenaPoteza,
-                            new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(kopija, igra.state)));
+                            new OcenjenaPoteza(p,OceniPozicijo.oceniPozicijo(igra, igra.nasprotnik())));
                 }
+                igra.odOdigraj(p);
             } else if (me) { // if my turn
-                ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza, minimax(kopija, globina - 1, false));
+                System.out.println("its my turn");
+                ocenjenaPoteza = OcenjenaPoteza.max(ocenjenaPoteza, minimax(igra, globina - 1, false));
+                igra.odOdigraj(p);
             } else { // if !my turn
-                ocenjenaPoteza = OcenjenaPoteza.min(ocenjenaPoteza, minimax(kopija, globina - 1, true));
+                System.out.println("its not my turn");
+                ocenjenaPoteza = OcenjenaPoteza.min(ocenjenaPoteza, minimax(igra, globina - 1, true));
+                igra.odOdigraj(p);
             }
+            System.out.println("reached the end of minimax block, removing poteza " + p);
+
         }
     return ocenjenaPoteza;
 
@@ -134,5 +141,48 @@ public class Minimax extends Inteligenca {
         //}
         //System.out.println("Picked " + najboljsaPoteza.poteza + " of value " + najboljsaPoteza.cost);
         //return najboljsaPoteza;
+
+    }
+
+    public OcenjenaPoteza najboljsaPoteza (Igra igra) {
+        int ai = igra.state;
+        OcenjenaPoteza bestMove = null;
+        for (Poteza p : igra.poteze) {
+            igra.odigraj(p);
+            int score = minimax2(igra, 0, false, ai,5);
+            igra.odOdigraj(p);
+            bestMove = OcenjenaPoteza.max(bestMove, new OcenjenaPoteza(p, score));
+        }
+        return bestMove;
+    }
+    public int minimax2 (Igra igra, int globina, boolean maximisingPlayer, int ai, int depthLimit) {
+        if (globina == depthLimit || igra.winner() != 0) {
+            int score;
+            switch (igra.state) {
+                case Igra.BLACK_STATE, Igra.WHITE_STATE -> {score = (ai == Igra.BLACK_STATE ? OceniPozicijo.oceniPlosco(igra) : -OceniPozicijo.oceniPlosco(igra));}
+                case Igra.BLACK_WIN -> {score = (ai == Igra.BLACK_STATE ? OceniPozicijo.WIN : OceniPozicijo.LOSS);}
+                case Igra.WHITE_WIN -> {score = (ai == Igra.WHITE_STATE ? OceniPozicijo.WIN : OceniPozicijo.LOSS);}
+                default ->  score = 0;
+            }
+            return score;
+        } else if (maximisingPlayer) {
+            int bestScore = OceniPozicijo.LOSS;
+            for (Poteza p : igra.poteze) {
+                igra.odigraj(p);
+                int score = minimax2(igra, globina +1, false, ai, depthLimit);
+                igra.odOdigraj(p);
+                bestScore = Math.max(bestScore, score);
+            }
+            return bestScore;
+        } else {
+            int bestScore = OceniPozicijo.WIN;
+            for (Poteza p : igra.poteze) {
+                igra.odigraj(p);
+                int score = minimax2(igra, globina +1, true, ai, depthLimit);
+                igra.odOdigraj(p);
+                bestScore = Math.min(bestScore, score);
+            }
+            return bestScore;
+        }
     }
 }

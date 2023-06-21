@@ -1,19 +1,26 @@
-package gui;
+package gui2;
 
+import gui.ColorConstants;
 import logika.Igra;
+import logika2.Igra2;
+import splosno.KdoIgra;
 import splosno.Poteza;
 import vodja.Vodja;
+import vodja2.Vodja2;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.*;
+import java.awt.event.ComponentEvent;
+import java.awt.event.ComponentListener;
+import java.awt.event.MouseEvent;
+import java.awt.event.MouseListener;
 
 import static vodja.PlayerType.C;
 import static vodja.Vodja.vrstaIgralca;
 
 public class Panel extends JPanel implements MouseListener, ComponentListener {
     private int cellSize;
-    protected Igra igra;
+    protected Igra2 igra;
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
@@ -44,24 +51,24 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         index = 0;
 
         // initial color constants:
-        colorBackground = ColorConstants.LIGHT_BACKGROUND;
-        colorBoard = ColorConstants.LIGHT_BOARD;
-        colorGrid = ColorConstants.LIGHT_GRID;
-        colorPlayerBlack = ColorConstants.LIGHT_PLAYER_BLACK;
-        colorPlayerBlackOutline = ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
-        colorPlayerWhite = ColorConstants.LIGHT_PLAYER_WHITE;
-        colorPlayerWhiteOutline = ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
+        colorBackground = gui.ColorConstants.LIGHT_BACKGROUND;
+        colorBoard = gui.ColorConstants.LIGHT_BOARD;
+        colorGrid = gui.ColorConstants.LIGHT_GRID;
+        colorPlayerBlack = gui.ColorConstants.LIGHT_PLAYER_BLACK;
+        colorPlayerBlackOutline = gui.ColorConstants.LIGHT_PLAYER_BLACK_OUTLINE;
+        colorPlayerWhite = gui.ColorConstants.LIGHT_PLAYER_WHITE;
+        colorPlayerWhiteOutline = gui.ColorConstants.LIGHT_PLAYER_WHITE_OUTLINE;
         colorCapturedBlock = ColorConstants.LIGHT_CAPTURED_BLOCK;
 
     }
 
-    public void setGameState(Igra igra) {
+    public void setGameState(Igra2 igra) {
         if (igra != null) {
-            int player = igra.state;
+            KdoIgra player = igra.naVrsti;
             int size = igra.size;
-            if (this.igra != null && this.igra.state == player && this.igra.size == size) {
+            if (this.igra != null && this.igra.naVrsti == player && this.igra.size == size) {
                 return;
-            }
+            } //i dont see a need for this //oh i do nevermind
             this.igra = igra;
             cellSize = Math.min(getWidth(), getHeight()) / (igra.size + 1);
             radius = 4 * cellSize / 5;
@@ -74,7 +81,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         super.paintComponent(g);
         if (igra == null) return;
         int size = igra.size;
-        int[][] grid = igra.grid;
+        char[][] grid = igra.grid;
         Graphics2D g2 = (Graphics2D) g;
 
         // drawing the background:
@@ -100,20 +107,20 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // drawing the stones:
         for (int row = 0; row < size; row++) {
             for (int col = 0; col < size; col++) {
-                int stone = grid[row][col];
+                KdoIgra stone = igra.barvaFromGrid(new Poteza(col, row));
                 g2.setStroke(playerOutlineWidth);
-                if (stone == Igra.BLACK_STATE) {
+                if (stone == Igra2.black) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorPlayerBlackOutline);
                 }
-                else if (stone == Igra.WHITE_STATE) {
+                else if (stone == Igra2.white) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorPlayerWhiteOutline);
                 }
-                else if (stone == Igra.WHITE_WIN) {
+                /* else if (stone == Igra.WHITE_WIN) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerBlack, colorCapturedBlock);
                 }
                 else if (stone == Igra.BLACK_WIN) {
                     drawStone(g, boardX, boardY, row, col, colorPlayerWhite, colorCapturedBlock);
-                }
+                } */
             }
         }
 
@@ -121,10 +128,10 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         g.setColor(Color.BLACK);
         g.setFont(new Font("Arial", Font.BOLD, cellSize / 3));
         String text;
-        if (igra.state == Igra.WHITE_WIN || igra.state == Igra.BLACK_WIN) {
+        /* if (igra.state == Igra.WHITE_WIN || igra.state == Igra.BLACK_WIN) {
             text = "Game over.";
         }
-        else if (igra.state == Igra.BLACK_STATE) {
+        else */ if (igra.naVrsti == Igra2.black) {
             text = "It's BLACK's turn.";
         }
         else {
@@ -149,9 +156,9 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     public void mouseClicked(MouseEvent e) {
         // check if the game is running and is not over
         if (igra == null) return;
-        if (igra.gameOver() != null) return;
+        if (igra.gameOver) return;
         // if it's the human player's turn, listen for the mouse click
-        if (vrstaIgralca.get(igra.state) == C) {
+        if (Vodja2.vrstaIgralca.get(igra.naVrsti) == C) {
             int x = e.getX();
             int y = e.getY();
             int size = igra.size;

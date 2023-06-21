@@ -29,8 +29,8 @@ public class OceniPozicijo {
         int costOpponent = 0;
         for (Group g : opponentGroups) {costOpponent += g.liberties.size();}
         switch (igra.state) {
-            case Igra.CAPTURED_BLACK-> {cost = (state == Igra.WHITE_STATE ? WIN : LOSS);}
-            case Igra.CAPTURED_WHITE -> {cost = (state == Igra.BLACK_STATE ? WIN : LOSS);}// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
+            case Igra.WHITE_WIN -> {cost = (state == Igra.WHITE_STATE ? WIN : LOSS);}
+            case Igra.BLACK_WIN -> {cost = (state == Igra.BLACK_STATE ? WIN : LOSS);}// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
             default -> {
                 cost = costYou - costOpponent;
             }
@@ -76,10 +76,10 @@ public class OceniPozicijo {
                 //System.out.println("Calculated procenti cost of "+ cost);
         //return (int) cost;
             switch (igra.state) {
-                case Igra.CAPTURED_BLACK -> {
+                case Igra.WHITE_WIN -> {
                     return (state == Igra.WHITE_STATE ? WIN : LOSS);
                 }
-                case Igra.CAPTURED_WHITE -> {
+                case Igra.BLACK_WIN -> {
                     return (state == Igra.BLACK_STATE ? WIN : LOSS);
                 }// <- the are bug (vedno loss ker je stanje igre captured medtem ko je state nekoncno)
                 default -> {
@@ -106,5 +106,32 @@ public class OceniPozicijo {
                     return (int) cost;
                 }
             }
+    }
+
+    public static int oceniPlosco (Igra igra) {
+        int blackCost = 0;
+        int whiteCost = 0;
+        switch (igra.state) {
+            //check boundary condition
+            case Igra.BLACK_WIN -> {blackCost = OceniPozicijo.WIN; whiteCost = OceniPozicijo.LOSS;}
+            case Igra.WHITE_WIN -> {whiteCost = OceniPozicijo.WIN; blackCost = OceniPozicijo.LOSS;}
+            default -> {
+                //sum up the tiles
+                for (int j = 0; j < igra.size; ++j){
+                    for (int i = 0; i < igra.size; ++i) {
+                        if (igra.grid[j][i] == 1) {++blackCost;} else {++whiteCost;}
+                    }
+                }
+                //sum up group sizes
+                for (Group g : igra.groups) {
+                    if (igra.groupState(g) == 1) {
+                        blackCost += g.group.size();
+                    } else if (igra.groupState(g) == 2) {
+                        whiteCost += g.group.size();
+                    }
+                }
+            }
+        }
+        return blackCost - whiteCost;
     }
 }

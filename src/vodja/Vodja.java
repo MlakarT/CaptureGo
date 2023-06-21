@@ -25,7 +25,7 @@ public class Vodja {
     public static boolean clovekNaVrsti = false;
 
     //public static Inteligenca inteligenca = new RandomMove();
-    public static Inteligenca inteligenca = new Inteligenca();
+    public static Inteligenca inteligenca = new Minimax(4);
     //public static Inteligenca inteligenca = new AlphaBeta();
 
     public static void playNewGame() {
@@ -35,7 +35,7 @@ public class Vodja {
 
     public static void play() {
         switch (game.state) {
-            case Igra.CAPTURED_BLACK, Igra.CAPTURED_WHITE -> {}
+            case Igra.WHITE_WIN, Igra.BLACK_WIN -> {}
             case Igra.BLACK_STATE, Igra.WHITE_STATE -> {
                 //poglej kdoj na vrst
                 PlayerType player = (game.state == Igra.BLACK_STATE ? vrstaIgralca.get(Igra.BLACK_STATE) : vrstaIgralca.get(Igra.WHITE_STATE) );

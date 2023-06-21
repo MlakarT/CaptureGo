@@ -1,5 +1,6 @@
 package logika;
 
+import com.sun.source.tree.WhileLoopTree;
 import splosno.KdoIgra;
 import splosno.Poteza;
 
@@ -10,13 +11,14 @@ import java.util.List;
 public class Igra {
     public int size;
     public int[][] grid;
+
     public int state;
     public static final int NULL_STATE = 0;
     public static final int BLACK_STATE = 1;
     public static final int WHITE_STATE = 2;
 
-    public static final int CAPTURED_BLACK = 3;
-    public static final int CAPTURED_WHITE = 4;
+    public static final int WHITE_WIN = 3;
+    public static final int BLACK_WIN = 4;
 
     protected static final Poteza[] directions = {new Poteza(1,0), new Poteza(-1, 0), new Poteza(0,1), new Poteza(0, -1)};
     private HashMap<KdoIgra, Integer> players;
@@ -40,6 +42,9 @@ public class Igra {
         grid = new int[n][n];
         return grid;
     }
+
+
+
     private void switchState() {
         if (this.state == BLACK_STATE) {
             this.state = WHITE_STATE;
@@ -114,7 +119,7 @@ public class Igra {
     }
     public boolean odigraj(Poteza poteza) {
         //System.out.println("current state is " + this.state);
-        if (this.state == CAPTURED_BLACK || this.state == CAPTURED_WHITE) {return false;}
+        if (this.state == WHITE_WIN || this.state == BLACK_WIN) {return false;}
         // this only happens once, does not let any other Poteza play
         // used mostly for testing purposes, as the game closes immediately
         if (this.grid[poteza.y()][poteza.x()] == 0 && !isSuicide(poteza)) {
@@ -161,14 +166,30 @@ public class Igra {
             if (this.gameOver() != null) {
                 this.close();
             }
+            this.printGame();
             return true;
         }
         return false;
     }
 
+    public boolean odOdigraj (Poteza poteza) {
+        if (this.grid[poteza.y()][poteza.x()] == 0) return false;
+        this.grid[poteza.y()][poteza.x()] = 0;
+        this.poteze.add(poteza);
+        Group g = this.isInGroup(poteza);
+        g.group.remove(poteza);
+        if (g.group.size() == 0) {this.groups.remove(g);}
+        this.resetLiberties(g);
+        this.state = nasprotnik();
+        this.resetAllGroups();
+        printGame();
+        return true;
+    }
+
+
     private void close() {
-        if (this.state == BLACK_STATE) {this.state = CAPTURED_WHITE;}
-        else { this.state = CAPTURED_BLACK;}
+        if (this.state == BLACK_STATE) {this.state = BLACK_WIN;}
+        else { this.state = BLACK_WIN;}
     }
     public Group gameOver() {
         //todo here goes the game logic
@@ -178,7 +199,7 @@ public class Igra {
                 // check if this actually happened
                 //System.out.println("Group " + g + " is captured");
                 for (Poteza p : g.group.keySet()) {
-                    int locState = (this.grid[p.y()][p.x()] == BLACK_STATE ? CAPTURED_BLACK : CAPTURED_WHITE);
+                    int locState = (this.grid[p.y()][p.x()] == BLACK_STATE ? WHITE_WIN : BLACK_WIN);
                     g.group.replace(p, locState);
                     this.grid[p.y()][p.x()] = locState;
                 }
@@ -188,6 +209,14 @@ public class Igra {
             }
         }
         return null;
+    }
+
+    public int winner() {
+        switch (this.state) {
+            case BLACK_WIN -> {return BLACK_STATE;}
+            case WHITE_WIN -> {return WHITE_STATE;}
+            default -> {return NULL_STATE;}
+        }
     }
 
     public List<Poteza> poteze() {
@@ -201,7 +230,13 @@ public class Igra {
     }
 
     public int nasprotnik() {
-        return (this.state == BLACK_STATE ? WHITE_STATE : BLACK_STATE);
+        return switch (this.state) {
+            case BLACK_WIN -> BLACK_STATE;
+            case WHITE_WIN -> WHITE_STATE;
+            case BLACK_STATE -> WHITE_STATE;
+            case WHITE_STATE -> BLACK_STATE;
+            default -> NULL_STATE;
+        };
     }
     public void printGame() {
         for (int i = 0; i < this.size; ++i) {

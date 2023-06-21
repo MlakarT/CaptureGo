@@ -26,7 +26,7 @@ public class Inteligenca extends KdoIgra {
             Igra kopija = Igra.copy(igra);
             kopija.odigraj(p);
             //check if we've reached either the end of minimax or end of game
-            if (globina == 1 || kopija.state == Igra.CAPTURED_BLACK || kopija.state == Igra.CAPTURED_WHITE) {
+            if (globina == 1 || kopija.state == Igra.WHITE_WIN || kopija.state == Igra.BLACK_WIN) {
                 //int ocena = ((igra.state == Igra.BLACK_STATE && kopija.state == Igra.CAPTURED_WHITE) ||
                 //        (igra.state == Igra.WHITE_STATE && kopija.state == Igra.CAPTURED_BLACK) ? OceniPozicijo.WIN : OceniPozicijo.LOSS);
                 if (me) { //if my turn then take highest
