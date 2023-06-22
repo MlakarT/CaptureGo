@@ -15,4 +15,6 @@ public class RandomMove2 extends Inteligenca2 {
         int n = igra.moznePoteze.size();
         return igra.moznePoteze.get(r.nextInt(n-1));
     }
+
+
 }

@@ -13,6 +13,8 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.HashMap;
 
+import static vodja2.Vodja2.igra;
+
 public class Frame extends JFrame implements ActionListener {
     protected gui2.Panel panel;
     protected JPanel buttonPanel;
@@ -96,7 +98,7 @@ public class Frame extends JFrame implements ActionListener {
         buttonPanel.add(cvcButton, gbc);
 
         // centering the buttons:
-        add(buttonPanel, BorderLayout.CENTER);
+        //add(buttonPanel, BorderLayout.CENTER);
 
         // terminate the application when the window is closed:
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -126,65 +128,55 @@ public class Frame extends JFrame implements ActionListener {
         // if buttons or listed menu options are clicked, the buttons will disappear and the panel
         // will reappear instead, starting the game based on the user's choice
         if (object == gamePlayerVsPlayer || object == pvpButton) {
-            remove(buttonPanel);
-            add(panel);
-            Vodja2.vrstaIgralca = new HashMap<>();
-            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.C);
-            Vodja2.vrstaIgralca.put(Igra2.white , PlayerType.C);
-            KdoIgra black = new KdoIgra("Black Player");
-            KdoIgra white = new KdoIgra("White Player");
-            Vodja2.playNewGame(9 /*tukej se spremeni size*/, black, white);
-            panel.igra = Vodja2.igra;
-            panel.gameSize = 9; /* pa tuki isto*/
-            panel.player1 = black; // also kle lahko displayas zdej kdo je navrst poimensko
-            panel.player2 = white;
+            String input = JOptionPane.showInputDialog(this, "Select board size (9 - 19)");
+            if (input != null && input.matches("\\d+")) {
+                KdoIgra black = new KdoIgra("Black Player");
+                KdoIgra white = new KdoIgra("White Player");
+                Vodja2.vrstaIgralca = new HashMap<>();
+                Vodja2.vrstaIgralca.put(black, PlayerType.C);
+                Vodja2.vrstaIgralca.put(white , PlayerType.C);
+                Vodja2.playNewGame(Integer.parseInt(input), black, white);
+                panel.setGame(igra);
+            }
+            //System.out.println("added game " + Vodja2.igra + " to panel " + panel);
             // repaints the panel (repaint() did not work as it should so stackoverflow suggested this instead):
-            SwingUtilities.updateComponentTreeUI(panel);
+            //SwingUtilities.updateComponentTreeUI(panel);
         }
         else if (object == gamePlayerVsComputer || object == pvcButton) {
-            remove(buttonPanel);
-            add(panel);
-            Vodja2.vrstaIgralca = new HashMap<>();
-            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.C);
-            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.R);
-            KdoIgra black = new KdoIgra("Black Player");
-            KdoIgra white = new KdoIgra("Computer");
-            Vodja2.playNewGame(9 /* change this*/, black, white);
-            panel.igra = Vodja2.igra;
-            panel.gameSize = 9;
-            panel.player1 = black;
-            panel.player2 = white;
-            SwingUtilities.updateComponentTreeUI(panel);
+            String input = JOptionPane.showInputDialog(this, "Select board size (9 - 19)");
+            if (input != null && input.matches("\\d+")) {
+                KdoIgra black = new KdoIgra("Black Player");
+                KdoIgra white = new KdoIgra("Computer");
+                Vodja2.vrstaIgralca = new HashMap<>();
+                Vodja2.vrstaIgralca.put(black, PlayerType.C);
+                Vodja2.vrstaIgralca.put(white , PlayerType.R);
+                Vodja2.playNewGame(Integer.parseInt(input), black, white);
+                panel.setGame(igra);
+            }
         }
         else if (object == gameComputerVsPlayer || object == cvpButton) {
-            remove(buttonPanel);
-            add(panel);
-            Vodja2.vrstaIgralca = new HashMap<>();
-            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.R);
-            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.C);
-            KdoIgra black = new KdoIgra("Computer");
-            KdoIgra white = new KdoIgra("White Player");
-            Vodja2.playNewGame(9 /* change this */, black, white);
-            panel.igra = Vodja2.igra;
-            panel.gameSize = 9;
-            panel.player1 = black;
-            panel.player2 = white;
-            SwingUtilities.updateComponentTreeUI(panel);
+            String input = JOptionPane.showInputDialog(this, "Select board size (9 - 19)");
+            if (input != null && input.matches("\\d+")) {
+                KdoIgra black = new KdoIgra("Computer");
+                KdoIgra white = new KdoIgra("White Player");
+                Vodja2.vrstaIgralca = new HashMap<>();
+                Vodja2.vrstaIgralca.put(black, PlayerType.R);
+                Vodja2.vrstaIgralca.put(white , PlayerType.C);
+                Vodja2.playNewGame(Integer.parseInt(input), black, white);
+                panel.setGame(igra);
+            }
         }
         else if (object == gameComputerVsComputer || object == cvcButton) {
-            remove(buttonPanel);
-            add(panel);
-            Vodja2.vrstaIgralca = new HashMap<>();
-            Vodja2.vrstaIgralca.put(Igra2.black, PlayerType.R);
-            Vodja2.vrstaIgralca.put(Igra2.white, PlayerType.R);
-            KdoIgra black = new KdoIgra("Black Computer");
-            KdoIgra white = new KdoIgra("White Computer");
-            Vodja2.playNewGame(9/*and this*/, black, white);
-            panel.igra = Vodja2.igra;
-            panel.gameSize = 9;
-            panel.player1 = black;
-            panel.player2 = white;
-            SwingUtilities.updateComponentTreeUI(panel);
+            String input = JOptionPane.showInputDialog(this, "Select board size (9 - 19)");
+            if (input != null && input.matches("\\d+")) {
+                KdoIgra black = new KdoIgra("Black Computer");
+                KdoIgra white = new KdoIgra("White Computer");
+                Vodja2.vrstaIgralca = new HashMap<>();
+                Vodja2.vrstaIgralca.put(black, PlayerType.R);
+                Vodja2.vrstaIgralca.put(white , PlayerType.R);
+                Vodja2.playNewGame(Integer.parseInt(input), black, white);
+                panel.setGame(igra);
+            }
         }
         // options for changing the theme/individual colors:
         else if (object == settingsLightTheme) {

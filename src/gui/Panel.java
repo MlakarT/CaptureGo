@@ -17,7 +17,6 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
     protected Stroke gridWidth;
     protected Stroke playerOutlineWidth;
     protected int radius;
-    protected int index;
     protected Color colorBackground;
     protected Color colorBoard;
     protected Color colorGrid;
@@ -41,7 +40,7 @@ public class Panel extends JPanel implements MouseListener, ComponentListener {
         // initial values:
         gridWidth = new BasicStroke(2);
         playerOutlineWidth = new BasicStroke(2);
-        index = 0;
+
 
         // initial color constants:
         colorBackground = ColorConstants.LIGHT_BACKGROUND;
